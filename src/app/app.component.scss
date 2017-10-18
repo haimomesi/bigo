@@ -1,0 +1,386 @@
+@import '../styles/app.scss';
+
+$menu-color: $cs-01; //TAKEN FROM CS-01 => BLUE
+$menu-height: 120px; //MENU HEIGHT
+$menu-list-item-color: #596377; //LEFT MENU TEXT COLOR
+$menu-list-item-hover-color: #D3D8E0; //LEFTM MENU TEXT HOVER COLOR
+
+$user-data-text-color: #757b8c; //RIGHT MENU TEXT COLOR
+$progress-icon-size: 24px;
+$circle-size: 36px;
+
+$create-circle-hover: #54c08a;
+$initial-bg-color: #596376;
+$nav-link-color: #898f9a;
+
+$user-name-color: #4b5362;
+$user-mail-color: #8799b6;
+
+.overlay {
+    background-color: $cs-purple;
+    padding: 0 40px;
+
+    .container {
+        /*max-width: $sceen-max-width;*/
+        height: $menu-height;
+        background-color: $cs-purple;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        max-width: $sceen-max-width;
+    }
+
+    .menu-list {
+        float: left;
+        /*width: 70%;*/
+
+        &__item {
+            display: inline-block;
+            padding: 20px 0 5px;
+
+            .text {
+                font-size: 10px;
+                color: $cs-white;
+                transition: color .2s ease-in-out;
+                text-transform: uppercase;
+            }
+
+            .text:before {
+                content: '/';
+                color: $cs-white;
+                width: 20px;
+                height: 20px;
+                margin: 0 10px 0px 6px;
+            }
+
+            &:first-of-type {
+                .text:before {
+                    content: none;
+                }
+            }
+
+            &:hover {
+                cursor: default;
+
+                /*.text {
+                    color: $menu-list-item-hover-color;
+                }*/
+            }
+        }
+    }
+
+
+    .user-data {
+        float: right;
+        padding: 16px 0 0;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &__item {
+            color: $user-data-text-color;
+            display: inline-block;
+            margin: 0 0 0 10px;
+            font-size: 12px;
+            display: block;
+            position: relative;
+
+            .user-notifaction-wrapper {
+                position: absolute;
+                top: -10px;
+                left: 104px;
+            }
+
+            .user-profile-wrapper {
+                position: absolute;
+                top: -17px;
+                left: 72px;
+                width: auto;
+                height: auto;
+            }
+
+            &.title {
+
+                .text {
+                    text-transform: uppercase;
+                    text-decoration: none;
+                    color: $cs-02;
+                    font-weight: 800;
+                    font-size: 11px;
+                }
+
+                &:hover {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .icon--progress {
+            .upload-count {
+                width: 14px;
+                height: 14px;
+                position: absolute;
+                top: -4px;
+                right: 0px;
+                z-index: 9;
+                background: $cs-02;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: $cs-white;
+                border-radius: $progress-icon-size;
+                font-size: 10px;
+            }
+
+
+
+            svg {
+                width: $progress-icon-size;
+                height: $progress-icon-size;
+                cursor: pointer;
+            }
+
+            path {
+                fill: $user-data-text-color;
+            }
+        }
+
+
+
+        .user-info {
+            .text {
+                display: flex;
+                align-items: center;
+
+                &:hover {
+                    cursor: pointer;
+                    color: rgba($cs-white,.6);
+                    transition: color .3s;
+
+                    svg {
+                        fill: #9198a8 !important;
+                        transition: fill .3s;
+                    }
+                }
+            }
+
+            .icon {
+                padding-left: 4px;
+                margin-top: 2px;
+                pointer-events: none;
+
+                svg {
+                    width: 14px;
+                    height: 14px;
+                    fill: $user-data-text-color;
+                }
+            }
+        }
+    }
+
+
+    .menu-content {
+        margin: 20px 0;
+
+        .title {
+            width: auto;
+            height: 32px;
+            float: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            &__line {
+                height: 32px;
+                width: 1px;
+                background: $cs-white;
+                float: left;
+                margin-right: 10px;
+            }
+
+            .amdocs-logo {
+                width: 180px;
+                height: 40px;
+                float: left;
+                fill: $cs-white;
+                margin-right: 10px;
+            }
+
+
+
+            .text {
+                /*@extend .text--ellipsis;*/
+                color: $cs-white;
+                float: left;
+                font-size: 28px;
+                font-weight: 400;
+                margin-bottom: 2px;
+            }
+        }
+
+        .actions-list {
+            position: relative;
+            float: right;
+            display: flex;
+
+
+
+            .action-item {
+                display: inline-block;
+
+                &.share {
+                    width: 120px;
+                    background-color: $cs-03;
+                    border-radius: 36px;
+                    padding: 10px;
+                    color: $cs-white;
+                    text-align: center;
+                    text-transform: uppercase;
+                    font-size: 12px;
+                    font-weight: 600;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: $circle-size;
+                    cursor: pointer;
+                    margin: 0 6px;
+
+                    svg {
+                        width: 22px;
+                        height: 18px;
+                        fill: $cs-white;
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                &.initial {
+                    width: $circle-size;
+                    height: $circle-size;
+                    border-radius: $circle-size;
+                    background-color: $initial-bg-color;
+                    color: $cs-white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                    cursor: pointer;
+                    z-index: 3;
+                }
+
+                &.create {
+                    width: $circle-size;
+                    height: $circle-size;
+                    border-radius: $circle-size;
+                    border: 1px dashed #3d4350;
+                    z-index: 2;
+                    margin-left: -6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: border .2s ease-in-out;
+
+
+
+                    .icon--plus {
+                        svg {
+                            transition: fill .2s ease-in-out;
+                            width: 20px;
+                            height: 20px;
+                            fill: $cs-white;
+                        }
+                    }
+
+                    &:hover {
+                        border: 1px dashed rgba($cs-white,.4);
+                        transition: border .4s;
+
+                        .tooltip {
+                            opacity: 1;
+                            transition: opacity .4s;
+                        }
+
+                        svg {
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .menu-footer {
+        display: flex;
+        height: 100%;
+
+        .nav {
+            display: flex;
+            align-items: flex-end;
+
+            &__item {
+                color: $nav-link-color;
+                display: inline-block;
+                padding: 18px 11px 20px;
+                transition: color .2s ease-in-out;
+                cursor: pointer;
+                margin-right: 45px;
+                font-size: 13px;
+                position: relative;
+                text-transform: uppercase;
+
+
+
+                &:last-of-type {
+                    margin-right: 0px;
+                }
+
+                &:hover {
+                    color: $cs-white;
+                }
+
+                &--disabled {
+                    cursor: not-allowed;
+
+                    &:hover {
+                        color: $nav-link-color;
+                    }
+                }
+
+                &:active,
+                &:focus {
+                    outline: 0;
+                    border: none;
+                }
+
+                &:after {
+                    transform: scale(0);
+                    transition: transform 250ms ease;
+                    background-color: $cs-magenta;
+                    content: '';
+                    height: 4px;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
+
+                &--active {
+                    color: $cs-white;
+
+                    &:after {
+                        transform: scale(1);
+                    }
+                }
+            }
+        }
+    }
+
+    .router {
+        position: absolute;
+        top: $menu-height;
+    }
+}

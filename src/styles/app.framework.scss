@@ -1,0 +1,637 @@
+﻿@import '../styles/app.vars.scss';
+
+.text--ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &.text--ellipsis--one {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+    }
+
+    &.text--ellipsis--two {
+        -webkit-line-clamp: 2;
+    }
+
+    &.text--ellipsis--three {
+        -webkit-line-clamp: 3;
+    }
+
+    &.text--ellipsis--four {
+        -webkit-line-clamp: 4;
+    }
+
+    &.text--ellipsis--five {
+        -webkit-line-clamp: 5;
+    }
+}
+
+.hidden{
+    display: none;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+   background-color:$cs-coolgrey;
+}
+
+::-webkit-scrollbar-thumb {
+   background-color:rgba(111, 111, 111, 0.4);
+}
+
+.file-type-icon{
+background-position: center left;
+background-size:contain;
+}
+ 
+//TODO: DEVELOP IN A BETTER WAY !!!!!!
+.text-icon{
+      @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/text-icon.svg');
+}
+.image-icon{
+    @extend .file-type-icon;
+   background-image: url('/Scripts/dist/assets/icons/file-types/image-icon.svg');
+}
+.video-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/video-icon.svg');
+}
+.calender-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/calendar-icon.svg');
+}
+.audio-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/audio-icon.svg');
+}
+.data-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/data-icon.svg');
+}
+.excel-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/excel-icon.svg');
+}
+.powerpoint-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/powerpoint-icon.svg');
+}
+.onenote-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/onenote-icon.svg');
+}
+.pdf-icon{
+    @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/pdf-icon.svg');
+
+}.folder-icon{
+     @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/folder-icon.svg');
+ }
+ .zip-icon{
+     @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/zip-icon.svg');
+ }
+  .exe-icon{
+     @extend .file-type-icon;
+     background-image: url('/Scripts/dist/assets/icons/file-types/exe-file.svg');
+ }
+
+ //SIZE
+
+.size-w--full {
+     width:100%;
+}
+
+.size-w--22 {
+    width: 22px;
+}
+
+.size-h--full {
+    height:100%;
+}
+
+.size-h--60{
+    height:60px;
+}
+
+.size-h--22 {
+    height: 22px;
+}
+
+.size-h--200 {
+    height: 200px;
+}
+
+.size-h--150 {
+    height: 150px;
+}
+
+.size-wh--full {
+    width:100%;
+    height:100%;
+}
+
+.size-h--calc-150 {
+    height: calc(100% - 150px);
+}
+
+.lh--60{
+    line-height: 60px;
+}
+
+.lh--26{
+    line-height: 26px;
+}
+
+//COLOR
+ 
+.text-color--purple-comp {
+    color:$cs-purple-comp;
+
+    &:hover{
+        color:$cs-white;
+    }
+}
+
+.text-color--purple-comp2 {
+    color:$cs-purple-comp;
+
+    &:hover{
+        color:$cs-purple-comp2;
+    }
+}
+
+.text-color--white {
+    color:$cs-white;
+}
+
+.text-color--header {
+    color: $cs-header;
+}
+
+.text-color--content {
+    color: $cs-content;
+}
+
+//BG COLOR 
+
+.bg--purple {
+    background-color: $cs-purple;
+}
+
+.bg--purple-comp {
+    background-color: $cs-purple-comp;
+}
+
+//POSITION 
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+//PADDING
+
+.plr--5 {
+    padding: 0 5px;
+}
+
+.plr--10 {
+    padding: 0 10px;
+}
+
+.plr--25 {
+    padding: 0 25px;
+}
+
+.plr--50 {
+    padding: 0 50px;
+}
+
+.plr--100 {
+    padding: 0 100px;
+}
+
+.plr--120 {
+    padding: 0 120px;
+}
+
+.ptb--5 {
+    padding: 5px 0;
+}
+
+.ptb--10 {
+    padding: 10px 0;
+}
+
+.ptb--25 {
+    padding: 25px 0;
+}
+
+.ptb--50 {
+    padding: 50px 0;
+}
+
+.ptb--100 {
+    padding: 100px 0;
+}
+
+.pl--5 {
+    padding-left: 5px;
+}
+
+.pl--10 {
+    padding-left: 10px;
+}
+
+.pl--15 {
+    padding-left: 15px;
+}
+
+.pl--20 {
+    padding-left: 20px;
+}
+
+.pl--25 {
+    padding-left: 25px;
+}
+
+.pl--60 {
+    padding-left: 60px;
+}
+
+.pr--5 {
+    padding-right: 5px;
+}
+
+.pr--10 {
+    padding-right: 10px;
+}
+
+.pr--15 {
+    padding-right: 15px;
+}
+
+.pr--20 {
+    padding-right: 20px;
+}
+
+.pr--25 {
+    padding-right: 25px;
+}
+
+.pt--5 {
+    padding-top: 5px;
+}
+
+.pt--10 {
+    padding-top: 10px;
+}
+
+.pt--15 {
+    padding-top: 15px;
+}
+
+.pt--20 {
+    padding-top: 20px;
+}
+
+.pt--25 {
+    padding-top: 25px;
+}
+
+.pb--5 {
+    padding-bottom: 5px;
+}
+
+.pb--10 {
+    padding-bottom: 10px;
+}
+
+.pb--15 {
+    padding-bottom: 15px;
+}
+
+.pb--20 {
+    padding-bottom: 20px;
+}
+
+.pb--25 {
+    padding-bottom: 25px;
+}
+
+.pb--40 {
+    padding-bottom: 25px;
+}
+
+.pb--50{
+    padding-bottom: 50px;
+}
+
+.pa--5 {
+    padding: 5px;
+}
+
+.pa--10 {
+    padding: 10px;
+}
+
+.pa--15 {
+    padding: 15px;
+}
+
+.pa--20 {
+    padding: 20px;
+}
+
+.pa--25 {
+    padding: 25px;
+}
+
+//MARGIN
+
+.mlr--5 {
+    margin: 0 5px;
+}
+
+.mlr--10 {
+    margin: 0 10px;
+}
+
+.mlr--25 {
+    margin: 0 25px;
+}
+
+.mlr--50 {
+    margin: 0 50px;
+}
+
+.mlr--100 {
+    margin: 0 100px;
+}
+
+.mtb--5 {
+    margin: 5px 0;
+}
+
+.mtb--10 {
+    margin: 10px 0;
+}
+
+.mtb--25 {
+    margin: 25px 0;
+}
+
+.mtb--50 {
+    margin: 50px 0;
+}
+
+.mtb--100 {
+    margin: 100px 0;
+}
+
+.ml--5 {
+    margin-left: 5px;
+}
+
+.ml--10 {
+    margin-left: 10px;
+}
+
+.ml--15 {
+    margin-left: 15px;
+}
+
+.ml--20 {
+    margin-left: 20px;
+}
+
+.ml--25 {
+    margin-left: 25px;
+}
+
+.mr--5 {
+    margin-right: 5px;
+}
+
+.mr--10 {
+    margin-right: 10px;
+}
+
+.mr--15 {
+    margin-right: 15px;
+}
+
+.mr--20 {
+    margin-right: 20px;
+}
+
+.mr--25 {
+    margin-right: 25px;
+}
+
+.mt--5 {
+    margin-top: 5px;
+}
+
+.mt--10 {
+    margin-top: 10px;
+}
+
+.mt--15 {
+    margin-top: 15px;
+}
+
+.mt--20 {
+    margin-top: 20px;
+}
+
+.mt--25 {
+    margin-top: 25px;
+}
+
+.mt--30 {
+    margin-top: 30px;
+}
+
+.mt--50 {
+    margin-top: 50px;
+}
+
+.mb--5 {
+    margin-bottom: 5px;
+}
+
+.mb--10 {
+    margin-bottom: 10px;
+}
+
+.mb--15 {
+    margin-bottom: 15px;
+}
+
+.mb--20 {
+    margin-bottom: 20px;
+}
+
+.mb--25 {
+    margin-bottom: 25px;
+}
+
+.mb--50 {
+    margin-bottom: 50px;
+}
+
+.mb--100 {
+    margin-bottom: 100px;
+}
+
+.ma--5 {
+    margin: 5px;
+}
+
+.ma--10 {
+    margin: 10px;
+}
+
+.ma--15 {
+    margin: 15px;
+}
+
+.ma--20 {
+    margin: 20px;
+}
+
+.ma--25 {
+    margin: 25px;
+}
+
+//TEXT
+
+.text--center {
+    text-align: center;
+}
+
+.text-size--9 {
+    font-size: 9px;
+}
+
+.text-size--10 {
+    font-size: 10px;
+}
+
+.text-size--11 {
+    font-size: 11px;
+}
+
+.text-size--12 {
+    font-size: 12px;
+}
+
+.text-size--13 {
+    font-size: 13px;
+}
+
+.text-size--14 {
+    font-size: 14px;
+}
+
+.text-size--15 {
+    font-size: 15px;
+}
+
+.text-size--16 {
+    font-size: 16px;
+}
+.text-size--17 {
+    font-size: 17px;
+}
+
+.text-size--18 {
+    font-size: 18px;
+}
+
+.text-size--19 {
+    font-size: 19px;
+}
+
+.text-size--20 {
+    font-size: 20px;
+}
+
+.text-size--26 {
+    font-size: 26px;
+}
+
+.text-transform--upper {
+    text-transform: uppercase;
+}
+
+.text-weight--600 {
+    font-weight: 600; 
+}
+
+.text-weight--300 {
+    font-weight: 300; 
+}
+
+.text-weight--200 {
+    font-weight: 200; 
+}
+
+.text-spacing--1{
+    letter-spacing: 1px;
+}
+
+//CURSOR
+
+.pointer {
+    cursor: pointer;
+}
+
+//DISPLAY
+
+.inlineblock {
+    display:inline-block;
+}
+
+.block {
+    display:block;
+}
+
+.flex {
+    display:flex;
+}
+
+.flex--column {
+    display:flex;
+    flex-direction:column;
+}
+
+.inlineflex {
+    display:inline-flex;
+    align-items: center;
+}
+
+//SVG
+
+.fill-color--purple-comp{
+    fill:$cs-purple-comp;
+    
+        &:hover{
+            fill:$cs-purple-comp2;
+        }
+}

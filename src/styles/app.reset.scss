@@ -1,0 +1,114 @@
+﻿@import 'app.vars.scss';
+
+body {
+    padding: 0;
+    margin: 0;
+    background: $cs-05;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-family: $montserrat;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    overflow: hidden;
+}
+
+* {
+    -webkit-backface-visibility: hidden;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-font-smoothing: antialiased;
+}
+
+*:focus {
+    outline: none;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+html, body {
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding-top: 20px;
+    overflow: visible;
+
+    tbody {
+        float: left;
+        width: 100%;
+        overflow: auto;
+        height: calc(100% - 55px);
+        overflow: auto;
+    }
+
+    tr {
+        width: 100%;
+        overflow: visible;
+        display: flex;
+    }
+}
+
+input, button, textarea, select {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 0;
+    font-family: inherit !important;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+}
+
+input[type=checkbox] {
+    -webkit-appearance: checkbox;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
