@@ -3,16 +3,15 @@ import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService } from './services/auth/auth-guard.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import { DesignsComponent } from './partials/designs/designs.component';
+import { DesignsResolver } from './resolves/designs/designs.resolve';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/designs',
-    pathMatch: 'full'
-  },
-  {
     path: 'designs',
     component: DesignsComponent,
+    resolve: {
+      designs: DesignsResolver
+    },
     canActivate: [AuthGuardService]
   },
   {
@@ -23,6 +22,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [DesignsResolver]
 })
 export class AppRoutingModule { }

@@ -1,0 +1,27 @@
+<div class="mlr--20p">
+  <form (ngSubmit)="onSubmit()" #designForm="ngForm">
+    <div class="form-group flex--column mb--20" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designTitle.invalid}">
+      <label for="designTitle">Title</label>
+      <input type="text" required [(ngModel)]="design.title" name="designTitle" class="form-control pl--15" id="designTitle" placeholder="Title">
+    </div>
+    <div class="form-group flex--column mb--20" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designTitle.invalid}">
+      <label for="designKeywords">Keywords</label>
+      <input type="text" required [(ngModel)]="design.keywords" name="designKeywords" class="form-control pl--15" id="designKeywords" placeholder="Keywords">
+    </div>
+    <div class="flex flex--space-between mb--20">
+      <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designFront.invalid}">
+        <label for="designFront">Front print</label>
+        <app-picture-uploader class="pl--15" required (notify)="onNotify($event, 'frontPrint')" id="designFront" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
+        <input type="hidden" name="designFront" [(ngModel)]="design.frontPrint">
+      </div>
+      <!-- <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designOutsideLabel.invalid}">
+        <label for="designOutsideLabel">Outside label</label>
+        <app-picture-uploader class="pl--15" required (notify)="onNotify($event, 'outsideLabelPrint')" id="designOutsideLabel" [defaultPicture]="defaultOutsideLabelPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
+        <input type="hidden" name="designOutsideLabel" [(ngModel)]="design.outsideLabelPrint">
+      </div> -->
+    </div>
+    <div class="form-group flex flex--center">
+      <button type="submit" class="button primary text--center">Create</button>
+    </div>
+  </form>
+</div>

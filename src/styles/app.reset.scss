@@ -23,6 +23,26 @@ body {
     outline: none;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+input:-webkit-autofill, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    animation: autofill 0s forwards;
+}
+
+@keyframes autofill {
+    100% {
+        background: transparent;
+        color: inherit;
+    }
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -80,7 +100,7 @@ table {
     display: block;
     padding-top: 20px;
     overflow: visible;
-
+    
     tbody {
         float: left;
         width: 100%;
@@ -88,7 +108,7 @@ table {
         height: calc(100% - 55px);
         overflow: auto;
     }
-
+    
     tr {
         width: 100%;
         overflow: visible;

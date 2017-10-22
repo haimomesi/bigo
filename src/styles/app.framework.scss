@@ -5,26 +5,26 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-
+    
     &.text--ellipsis--one {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         display: block;
     }
-
+    
     &.text--ellipsis--two {
         -webkit-line-clamp: 2;
     }
-
+    
     &.text--ellipsis--three {
         -webkit-line-clamp: 3;
     }
-
+    
     &.text--ellipsis--four {
         -webkit-line-clamp: 4;
     }
-
+    
     &.text--ellipsis--five {
         -webkit-line-clamp: 5;
     }
@@ -40,76 +40,76 @@
 }
 
 ::-webkit-scrollbar-track {
-   background-color:$cs-coolgrey;
+    background-color:$cs-coolgrey;
 }
 
 ::-webkit-scrollbar-thumb {
-   background-color:rgba(111, 111, 111, 0.4);
+    background-color:rgba(111, 111, 111, 0.4);
 }
 
 .file-type-icon{
-background-position: center left;
-background-size:contain;
+    background-position: center left;
+    background-size:contain;
 }
- 
+
 //TODO: DEVELOP IN A BETTER WAY !!!!!!
 .text-icon{
-      @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/text-icon.svg');
+    @extend .file-type-icon;
+    background-image: url('/Scripts/dist/assets/icons/file-types/text-icon.svg');
 }
 .image-icon{
     @extend .file-type-icon;
-   background-image: url('/Scripts/dist/assets/icons/file-types/image-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/image-icon.svg');
 }
 .video-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/video-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/video-icon.svg');
 }
 .calender-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/calendar-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/calendar-icon.svg');
 }
 .audio-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/audio-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/audio-icon.svg');
 }
 .data-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/data-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/data-icon.svg');
 }
 .excel-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/excel-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/excel-icon.svg');
 }
 .powerpoint-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/powerpoint-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/powerpoint-icon.svg');
 }
 .onenote-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/onenote-icon.svg');
+    background-image: url('/Scripts/dist/assets/icons/file-types/onenote-icon.svg');
 }
 .pdf-icon{
     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/pdf-icon.svg');
-
+    background-image: url('/Scripts/dist/assets/icons/file-types/pdf-icon.svg');
+    
 }.folder-icon{
-     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/folder-icon.svg');
- }
- .zip-icon{
-     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/zip-icon.svg');
- }
-  .exe-icon{
-     @extend .file-type-icon;
-     background-image: url('/Scripts/dist/assets/icons/file-types/exe-file.svg');
- }
+    @extend .file-type-icon;
+    background-image: url('/Scripts/dist/assets/icons/file-types/folder-icon.svg');
+}
+.zip-icon{
+    @extend .file-type-icon;
+    background-image: url('/Scripts/dist/assets/icons/file-types/zip-icon.svg');
+}
+.exe-icon{
+    @extend .file-type-icon;
+    background-image: url('/Scripts/dist/assets/icons/file-types/exe-file.svg');
+}
 
- //SIZE
+//SIZE
 
 .size-w--full {
-     width:100%;
+    width:100%;
 }
 
 .size-w--22 {
@@ -118,6 +118,10 @@ background-size:contain;
 
 .size-h--full {
     height:100%;
+}
+
+.size-h--50{
+    height:50px;
 }
 
 .size-h--60{
@@ -132,8 +136,16 @@ background-size:contain;
     height: 200px;
 }
 
+.size-h--250 {
+    height: 250px;
+}
+
 .size-h--150 {
     height: 150px;
+}
+
+.size-h--100 {
+    height: 100px;
 }
 
 .size-wh--full {
@@ -154,10 +166,10 @@ background-size:contain;
 }
 
 //COLOR
- 
+
 .text-color--purple-comp {
     color:$cs-purple-comp;
-
+    
     &:hover{
         color:$cs-white;
     }
@@ -165,7 +177,7 @@ background-size:contain;
 
 .text-color--purple-comp2 {
     color:$cs-purple-comp;
-
+    
     &:hover{
         color:$cs-purple-comp2;
     }
@@ -381,6 +393,10 @@ background-size:contain;
 
 .mlr--100 {
     margin: 0 100px;
+}
+
+.mlr--20p {
+    margin: 0 20%;
 }
 
 .mtb--5 {
@@ -621,6 +637,16 @@ background-size:contain;
     flex-direction:column;
 }
 
+.flex--space-between{
+    width: 100%;
+    justify-content: space-between;
+}
+
+.flex--center {
+    align-items: center;
+    justify-content: center;
+}
+
 .inlineflex {
     display:inline-flex;
     align-items: center;
@@ -631,7 +657,7 @@ background-size:contain;
 .fill-color--purple-comp{
     fill:$cs-purple-comp;
     
-        &:hover{
-            fill:$cs-purple-comp2;
-        }
+    &:hover{
+        fill:$cs-purple-comp2;
+    }
 }

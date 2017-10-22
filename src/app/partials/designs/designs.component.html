@@ -1,7 +1,7 @@
 <app-route-header name="My Designs" (onAdd)="addDesign()"></app-route-header>
 <div class="mlr--100 size-h--calc-150">
     <!--No Designs-->
-    <div class="no-designs">
+    <div *ngIf="designs.length == 0" class="no-designs">
         <div>
             <div class="no-designs-bucket text--center flex--column">
                 <span class="icon">
@@ -12,14 +12,23 @@
                     Upload a design and bring your products to life. 
                     The design will create shit loads of t-shirts 
                     and variations and upload them to Amazon.</p>
-                <div class="actions mt--25">
-                    <span class="button primary" (click)="addDesign()">Create a Design</span>
+                    <div class="actions mt--25">
+                        <span class="button primary" (click)="addDesign()">Create a Design</span>
+                    </div>
                 </div>
             </div>
         </div>
+        <!--Designs-->
+        <div class="flex" *ngIf="designs.length > 0">
+            <div class="design" *ngFor="let design of designs">
+                <div class="design-cover size-h--250 size-w--full">
+                    <img class="size-h--250 size-w--full" src="https://bigocommercetest.blob.core.windows.net/bigocommerce/e2c784591e4c4349/front.png"/>
+                </div>
+                <div class="design-meta size-h--50 size-w--full relative">
+                    <span class="design-meta-title">{{design.title}}</span>
+                    <span class="design-meta-subtitle">{{design.guid}}</span>
+                </div>
+            </div>
+        </div>
+        <app-modal [modalTitle]="'create new design'" [blocking]='false' [modalId]='modalId'></app-modal>
     </div>
-    <!--Designs-->
-    <div>
-
-    </div>
-</div>

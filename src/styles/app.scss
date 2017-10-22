@@ -2,6 +2,7 @@
 @import "app.reset.scss";
 @import "app.vars.scss";
 @import "app.framework.scss";
+@import "app.animations.scss";
 
 .router-space {
     position: absolute;
@@ -14,8 +15,12 @@
 }
 
 .route--active{
-    color: $cs-white;
+    
     cursor: default;
+
+    span{
+        color: $cs-white;
+    }
 }
 
 .button.primary {
