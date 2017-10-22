@@ -11,7 +11,7 @@
     <div class="flex flex--space-between mb--20">
       <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designFront.invalid}">
         <label for="designFront">Front print</label>
-        <app-picture-uploader class="pl--15" required (notify)="onNotify($event, 'frontPrint')" id="designFront" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
+        <app-picture-uploader #picture class="pl--15" required (notify)="onNotify($event, 'frontPrint')" id="designFront" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
         <input type="hidden" name="designFront" [(ngModel)]="design.frontPrint">
       </div>
       <!-- <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designOutsideLabel.invalid}">

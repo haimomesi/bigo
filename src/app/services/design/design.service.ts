@@ -7,9 +7,9 @@ import { AuthHttp } from 'angular2-jwt';
 @Injectable()
 export class DesignService {
 
-  private backendUrl = 'http://localhost:3000/api/';
+  private backendUrl = 'api/';
 
-  constructor(private http: Http, private authHttp: AuthHttp) { }
+  constructor(private http: Http, private authHttp: AuthHttp) {}
 
   // Implement a method to get the public deals
   getDesigns() {

@@ -12,11 +12,12 @@ import { DesignService } from '../../services/design/design.service';
 export class DesignFormComponent {
   
   @ViewChild('designForm') designForm;
+  @ViewChild('picture') picture;
   //@Input() state;
   defaultFrontPicture = 'assets/images/front.png';
   defaultOutsideLabelPicture = 'assets/images/outside-label.png';
   design:Design = new Design();
-  
+
   uploaderOptions: NgUploaderOptions = {
     url: '',
   };
@@ -34,6 +35,7 @@ export class DesignFormComponent {
   initDesign(){
     this.design = new Design();
     this.design.guid = Utils.guid();
+    console.log(this.picture);    
   }
   
   onNotify(event, cmpName) {
