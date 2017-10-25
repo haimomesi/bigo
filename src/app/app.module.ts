@@ -20,6 +20,11 @@ import { DesignService } from './services/design/design.service';
 import { HttpModule } from '@angular/http';
 import { AuthHttp, AuthConfig, AUTH_PROVIDERS, provideAuth } from 'angular2-jwt';
 import { AuthModule } from './services/auth/auth.module';
+import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
+import { NotificationService } from './services/notification/notification.service';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { ClickStopPropagationDirective } from './directives/click-stop-propagation.directive';
+import { SavingDotsComponent } from './components/saving-dots/saving-dots.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +35,11 @@ import { AuthModule } from './services/auth/auth.module';
     RouteHeaderComponent,
     ModalComponent,
     DesignFormComponent,
-    PictureUploaderComponent
+    PictureUploaderComponent,
+    ProfileMenuComponent,
+    NotificationsComponent,
+    ClickStopPropagationDirective,
+    SavingDotsComponent
   ],
   imports: [
     HttpModule,
@@ -45,7 +54,8 @@ import { AuthModule } from './services/auth/auth.module';
     AuthGuardService,
     SharedService, 
     ModalService, 
-    DesignService
+    DesignService,
+    NotificationService
   ],
   bootstrap: [AppComponent]
 })

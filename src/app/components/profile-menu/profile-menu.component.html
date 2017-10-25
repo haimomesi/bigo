@@ -1,0 +1,28 @@
+<div [ngClass]="{'profile-menu-closed': !isOpen}">
+  <div class="profile-menu">
+    
+    <div class="content">
+      
+      <div class="av">
+        <span class="app-avatar">
+          <span class="initials" style="display: block; line-height: 74px; font-size: 24.6667px;">{{initials}}</span>
+        </span>
+      </div> <!-- av -->
+      
+      <div class="profile-details">
+        <h1>{{displayName}}</h1>
+        <p>{{email}}</p>                
+      </div> <!-- text -->
+      
+      <ul class="profile-actions">
+        <li class="navbar-item inlineflex pointer" (click)=authService.logout() *ngIf="authService.loggedIn">
+          <span>
+            Log Out
+          </span>
+        </li>
+      </ul>
+      
+    </div> <!-- content -->
+    
+  </div>
+</div>

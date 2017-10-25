@@ -3,6 +3,7 @@ import { ModalService } from '../../services/modal/modal.service';
 import 'gsap';
 import { TweenLite } from 'gsap';
 import { Renderer2Service } from '../../services/utils/renderer2.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-modal',
@@ -19,7 +20,7 @@ export class ModalComponent implements OnInit  {
   public renderer;
   public isOpen = false;
 
-  constructor(private modalService: ModalService, rendererService: Renderer2Service) {
+  constructor(private modalService: ModalService, rendererService: Renderer2Service, private notificationService: NotificationService) {
     this.renderer = rendererService.getRenderer();
   }
 
@@ -29,5 +30,10 @@ export class ModalComponent implements OnInit  {
 
   close(checkBlocking = false): void {
     this.modalService.close(this.modalId, checkBlocking);
+  }
+
+  onNotify() {
+    this.close();
+    this.notificationService.open(0.65);
   }
 }

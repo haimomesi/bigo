@@ -14,5 +14,5 @@ interface AuthConfig {
     CLIENT_DOMAIN: 'bigocommerce.auth0.com',
     AUDIENCE: 'https://auth.bigocommerce.com/',
     REDIRECT: environment.redirectCallback,
-    SCOPE: 'openid'
+    SCOPE: 'openid profile'
   };

@@ -5,46 +5,60 @@
 
 .design {
     position: relative;
-    width: 200px;
+    width: 250px;
     height: 300px;
-    margin: 0 30px 30px 0;
+    margin: 0 15px 30px 15px;
     border-radius: 4px;
     box-shadow: 0 -1px 1px 0 rgba(0,0,0,.05), 0 1px 2px 0 rgba(0,0,0,.2);
     -webkit-transition: all .2s ease;
     transition: all .2s ease;
-
+    
+    
     &:hover{
         transform: translateY(-4px);
         box-shadow: 0 4px 25px 0 rgba(0,0,0,.3), 0 0 1px 0 rgba(0,0,0,.25);
     }
-
-    .design-meta-title{
-        top: 249px;
-        position: absolute;
-        left: 28px;
-        font-size: 16px;
-        line-height: 22px;
-        overflow: hidden;
-        color: #434C5E;
-        transition: color .2s ease-in-out;
-        max-width: 75%;
-        font-family: "Open Sans",open-sans,sans-serif;
-        text-align: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    
+    &-cover{
+        border-bottom: 1px solid #E0E0E0;
+        height: 225px;
+        width: 250px;
+        display: flex;
+        
+        img {
+            text-align: center;
+            margin: auto;
+            display: -webkit-box;
+        }
     }
-
-    .design-meta-subtitle{
-        position: absolute;
-        top: 274px;
-        left: 28px;
-        color: #8C96A9;
-        font-weight: 600;
-        line-height: 15px;
-        transform: translateY(0);
-        opacity: .6;
-        transition: all .2s ease-in-out;
-        font-size: 10px;
-        text-transform: uppercase;
+    
+    .design-meta {
+        
+        height: 75px;
+        
+        &-title{
+            font-size: 15px;
+            line-height: 30px;
+            overflow: hidden;
+            color: #434C5E;
+            transition: all .2s ease-in-out;
+            max-width: 90%;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+        }
+        
+        &-subtitle{
+            color: #8C96A9;
+            font-weight: 600;
+            line-height: 15px;
+            transform: translateY(0);
+            opacity: .6;
+            transition: all .2s ease-in-out;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        
     }
 }

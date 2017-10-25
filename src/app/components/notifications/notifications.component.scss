@@ -1,0 +1,210 @@
+.notifications-overlay {
+    background-color: rgba(30,35,50,.4);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.closed {
+    .notifications-overlay, .notifications-panel{
+        display: none;
+    }
+}
+
+.notifications-panel{
+    background: #f6f6f6;
+    bottom: 0;
+    position: absolute;
+    top: 0;
+    width: 348px;
+    height: 100%;
+    cursor: default;
+    z-index: 10001;
+}
+
+.notifications-header{
+    border-bottom: 1px solid #e1e2e6;
+    background: #fff;
+    height: 75px;
+    
+    h2{
+        font-weight: 600;
+        color: #3D4356;
+        font-size: 14px;
+        line-height: 19px;
+        display: block;
+        padding: 29px 31px 2px 29px;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 190px;
+        text-align: left;
+        text-overflow: ellipsis;
+        float: left;
+        box-sizing: border-box;
+    }
+}
+
+.notifications-wrapper {
+    height: calc(100% - 75px);
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.notifications-empty{
+    position: relative;
+    top: 35%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 75%;
+    margin: 0 auto;
+}
+
+.notifications-icon{
+    background-image: url(/assets/images/inbox-sprite.png);
+    background-size: 313px 249px;
+    background-position: -137px 0;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    display: block;
+    width: 48px;
+    height: 44px;
+    margin: 0 auto 24px;
+}
+
+.notifications-close {
+    
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 25px;
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    box-sizing: border-box;
+    width: 55px;
+    height: 55px;
+    padding: 11px 16px 3px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    transition: .1s ease-in;
+    
+    &:after{
+        position: absolute;
+        z-index: -1;
+        top: 25px;
+        left: 25px;
+        width: 5px;
+        height: 5px;
+        content: '';
+        border-radius: 50%;
+        background-color: rgba(0,0,0,.4);
+        opacity: 0;
+        transition: .1s ease-in;
+    }
+    
+    &:hover{
+        transform: scale(1.15);
+    }
+    
+    &:hover::after {
+        top: 0;
+        left: 0;
+        width: 55px;
+        height: 55px;
+        opacity: 1;
+    }
+    
+    .notifications-icon-close{
+        background-image: url(/assets/images/inbox-sprite.png);
+        background-size: 313px 249px;
+        background-position: 0 -233px;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        display: block;
+        width: 16px;
+        height: 16px;
+        margin: 0 auto;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 25px;
+        text-align: center;
+        text-transform: uppercase;
+        color: #fff;
+    }
+}
+
+.notification{
+    width: 320px;
+    margin: 5px auto;
+    padding: 10px 10px 10px 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 -1px 1px 0 rgba(0,0,0,.05), 0 1px 2px 0 rgba(0,0,0,.2);
+    height: 100px;
+    position: relative;
+    transition: all .05s ease-in;
+
+    &-status{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 5px;
+        transition: .05s ease-in;
+        background-color: #e1e2e6;
+
+        &--success{
+            background-color: #10b583;
+        }
+
+        &--error{
+            background-color: #f44336;
+        }
+    }
+
+    &-header{
+        font-weight: 400;
+        font-size: 14px;
+        padding: 5px 0px;
+    }
+
+    &-content{
+        font-weight: 200;
+        font-size: 13px;
+        padding: 10px 0px;
+
+        .notification-progress {
+            height: 10px;
+            border: 1px solid #e1e2e6;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+
+            &-body{
+                background-color: #10b583;
+                height: inherit;
+                //width: 100%;
+                border-radius: 5px;
+                height: 8px;
+            }
+        }
+    }
+
+    &:hover{
+
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px 0 rgba(0,0,0,.3), 0 0 1px 0 rgba(0,0,0,.25);
+
+        .notification-status{
+            width: 10px;
+            transition: .05s ease-in;
+        }
+
+    }
+}

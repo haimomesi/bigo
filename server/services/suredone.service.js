@@ -10,6 +10,19 @@ const suredoneHeaders = {
     'X-Auth-Token': suredoneConfig.API_access
 };
 
+exports.get = function(endpoint){
+    
+    var options = {
+        method: 'GET',
+        url: 'https://' + suredoneConfig.API_path + '/v1/' + endpoint,
+        headers: suredoneHeaders,
+        json: true
+    };
+    
+    //send request
+    return rp(options);
+};
+
 let post = function(endpoint, body){
     
     var options = {
@@ -23,10 +36,10 @@ let post = function(endpoint, body){
     return rp(options);
 };
 
-var uploadVariantToSureDone = function(variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination) {
+var uploadVariantToSureDone = function(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination) {
     
     let formBody = {};
-
+    
     formBody['identifier'] = 'guid';
     formBody['guid'] = `${itemGuid}-${repVariant.product_id}-${repVariantColor}-${variantsUnderColorCode.id}`;
     formBody['sku'] = `${itemGuid}-${repVariant.product_id}`;
@@ -57,24 +70,27 @@ var uploadVariantToSureDone = function(variantsUploadState, itemGuid, repVariant
     if (product.hasOwnProperty('bulletpoint3')) formBody['bulletpoint3'] = product.bulletpoint3;
     if (product.hasOwnProperty('bulletpoint4')) formBody['bulletpoint4'] = product.bulletpoint4;
     if (product.hasOwnProperty('bulletpoint5')) formBody['bulletpoint5'] = product.bulletpoint5;
-
+    
     variantsUploadState.totalVariantsProcessed++;
     console.log('variants proccessed: ' + variantsUploadState.totalVariantsProcessed + '. current variant: ' + variantsUnderColorCode.id);
     
     post('editor/items/start', formBody).then((x) => {
         variantsUploadState.totalVariantsUploaded++;
         console.log('variants uploaded: ' + variantsUploadState.totalVariantsUploaded + '. current variant: ' + variantsUnderColorCode.id);
-        if(variantsUploadState.totalVariants == variantsUploadState.totalVariantsUploaded) console.log('uploaded all variants');
+        
+        let status = variantsUploadState.totalVariants == variantsUploadState.totalVariantsUploaded ? 'success': 'uploading';
+        utils.notifySocket(io, socketId, itemGuid, status, variantsUploadState);
     })
     .catch(function(err){
-        console.log(err);
+        utils.notifySocket(io, socketId, itemGuid, 'error', null, err);
+        console.error(err);
     });
-}
+};
 
-exports.uploadParentToSureDone = function(variantsUploadState, productsCalculatedVariants, colors, productsByKey, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination, allVariantsUnderColorCode, mockups) {
+exports.uploadParentToSureDone = function(io, socketId, variantsUploadState, productsCalculatedVariants, colors, productsByKey, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination, allVariantsUnderColorCode, mockups) {
     
     let formBody = {};
-
+    
     formBody['identifier'] = 'guid';
     formBody['guid'] = `${itemGuid}-${repVariant.product_id}`;
     formBody['sku'] = `${itemGuid}-${repVariant.product_id}`;
@@ -106,9 +122,14 @@ exports.uploadParentToSureDone = function(variantsUploadState, productsCalculate
     if (product.hasOwnProperty('bulletpoint4')) formBody['bulletpoint4'] = product.bulletpoint4;
     if (product.hasOwnProperty('bulletpoint5')) formBody['bulletpoint5'] = product.bulletpoint5;
     
+    if(!variantsUploadState.designRepresentativeSet){
+        variantsUploadState.designRepresentativeSet = true;
+        formBody['designrep'] = '1';
+    } 
+    
     post('editor/items/start', formBody).then((x) => {
         allVariantsUnderColorCode.forEach(variantsUnderColorCode => {
-            uploadVariantToSureDone(variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
+            uploadVariantToSureDone(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
         });
     })
     .then(function(){
@@ -125,15 +146,17 @@ exports.uploadParentToSureDone = function(variantsUploadState, productsCalculate
             azureSvc.uploadBlobFromUrl(mockup.mockup_url, mockupDestination)
             .then((x) => {
                 allVariantsUnderColorCode.forEach(variantsUnderColorCode => {
-                    uploadVariantToSureDone(variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
+                    uploadVariantToSureDone(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
                 });
             })
             .catch(function(err){
-                console.log(err);
+                utils.notifySocket(io, socketId, itemGuid, 'error', null, err);
+                console.error(err);
             });
         });
     })
     .catch(function(err){
-        console.log(err);
+        utils.notifySocket(io, socketId, itemGuid, 'error', null, err);
+        console.error(err);
     });
 }

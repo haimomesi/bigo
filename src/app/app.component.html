@@ -1,44 +1,40 @@
 <div class="navbar size-w--full size-h--60 bg--purple">
     <div class="loader-wrapper layout-loader">
-        <app-loading-bar *ngIf="sharedService.mainLoading"></app-loading-bar>
+        <app-loading-bar *ngIf="mainLoading"></app-loading-bar>
     </div>
     <div class="navbar-content size-w--full size-h--60 lh--60 plr--120">
         <ul class="navbar-content-group flex left text-transform--upper text-size--10 text-weight--600 text-spacing--1">
-            <li routerLink="/designs" *ngIf="authService.authenticated" routerLinkActive="route--active" class="navbar-item inlineflex pointer">
+            <li routerLink="/designs" *ngIf="authService.loggedIn" routerLinkActive="route--active" class="navbar-item inlineflex pointer">
                 <span class="text text-color--purple-comp">Designs</span>
             </li>
         </ul>
         <ul class="navbar-content-group right flex text-size--12">
-            <li *ngIf="authService.authenticated" class="navbar-item inlineflex icon icon--progress pr--5 pointer">
+            <li *ngIf="authService.loggedIn" (click)="openNotifications()" class="navbar-item inlineflex icon icon--progress pr--10 pointer">
                 <svg class="size-h--22 size-w--22" viewBox="0 0 24 24">
-                    <path class="fill-color--purple-comp" d="M14,20A2,2 0 0,1 12,22A2,2 0 0,1 10,20H14M12,2A1,1 0 0,1 13,3V4.08C15.84,4.56 18,7.03 18,10V16L21,19H3L6,16V10C6,7.03 8.16,4.56 11,4.08V3A1,1 0 0,1 12,2Z"
+                    <path d="M14,20A2,2 0 0,1 12,22A2,2 0 0,1 10,20H14M12,2A1,1 0 0,1 13,3V4.08C15.84,4.56 18,7.03 18,10V16L21,19H3L6,16V10C6,7.03 8.16,4.56 11,4.08V3A1,1 0 0,1 12,2Z"
                     />
                 </svg>
                 <!-- <div class="user-notifaction-wrapper">
                 </div> -->
             </li>
-            <li *ngIf="authService.authenticated" class="navbar-item inlineflex pr--5 pointer">
-                <span class="text text-color--purple-comp2">
-                    Bigo Admin
+            <li *ngIf="authService.loggedIn" class="navbar-item inlineflex pr--5 pointer relative">
+                <span (click)="toggleProfile()">
+                    <span>
+                        Bigo Admin
+                    </span>
+                    <svg viewBox="0 0 24 24" class="user-data-arrow size-h--16 size-w--16 vertical-align--sub">
+                        <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                    </svg>
                 </span>
-                <svg viewBox="0 0 24 24" class="user-data-arrow size-h--22 size-w--22">
-                    <path class="fill-color--purple-comp" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                </svg>
-                <!-- <div class="user-profile-wrapper">
-                </div> -->
+                <app-profile-menu #profileMenu></app-profile-menu>
             </li>
-            <li class="navbar-item inlineflex pointer" *ngIf="!authService.authenticated" (click)="authService.login()">
-                <span class="text text-color--purple-comp2">
+            <li class="navbar-item inlineflex pointer" *ngIf="!authService.loggedIn" (click)="authService.login()">
+                <span>
                     Log In
-                </span>
-            </li>
-            <li class="navbar-item inlineflex pointer" (click)=authService.logout() *ngIf="authService.authenticated">
-                <span class="text text-color--purple-comp2">
-                    Log Out
                 </span>
             </li>
         </ul>
     </div>
 </div>
-
+<app-notifications></app-notifications>
 <router-outlet></router-outlet>

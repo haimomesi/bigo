@@ -33,7 +33,7 @@ export class ModalService {
       modal.modalForm.initDesign();
       modal.isOpen = true;
       
-      this.gsModalAnimation = new TimelineMax({ paused: true, onComplete:this.onOpen, onCompleteParams: [modal, self], onReverseComplete: this.onClose, onReverseCompleteParams:[modal] });
+      this.gsModalAnimation = new TimelineMax({ paused: true, onComplete:this.onOpen, onCompleteParams: [modal, self], onReverseComplete: this.onClose, onReverseCompleteParams:[modal, self] });
       
       this.gsModalAnimation
       .fromTo(".modal-overlay", 0.175,{autoAlpha: 0}, {autoAlpha: 1})
@@ -61,16 +61,16 @@ export class ModalService {
   }
   
   onOpen(modal, self){
-    this.listenerFn = modal.renderer.listen('document', 'keyup', function(event: KeyboardEvent): void {
+    self.listenerFn = modal.renderer.listen('document', 'keyup', function(event: KeyboardEvent): void {
       if (event.keyCode === 27) {
         self.close(self.modals[0].modalId, true);
       }
     });
   }
   
-  onClose(modal){
+  onClose(modal, self){
     modal.isOpen = false;
-    if(this.listenerFn) this.listenerFn();
+    if(self.listenerFn) self.listenerFn();
   }
   
   private findModal(modalId: string): ModalComponent {

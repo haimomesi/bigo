@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalService } from '../../services/modal/modal.service';
 import { ActivatedRoute } from '@angular/router';
 import { Design } from '../../shared/classes/design';
+import { SharedService } from '../../services/shared/shared.service';
 
 @Component({
   selector: 'app-designs',

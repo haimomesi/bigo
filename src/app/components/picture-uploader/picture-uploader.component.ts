@@ -46,8 +46,9 @@ export class PictureUploaderComponent {
     return false;
   }
 
-  removePicture():boolean {
+  public removePicture():boolean {
     this.picture = '';
+    this._fileUpload.nativeElement.value = '';
     this.notify.emit(null);
     return false;
   }

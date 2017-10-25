@@ -1,5 +1,5 @@
 <app-route-header name="My Designs" (onAdd)="addDesign()"></app-route-header>
-<div class="mlr--100 size-h--calc-150">
+<div class="plr--80 pt--100 size-h--calc-105 overflow--auto">
     <!--No Designs-->
     <div *ngIf="designs.length == 0" class="no-designs">
         <div>
@@ -19,14 +19,14 @@
             </div>
         </div>
         <!--Designs-->
-        <div class="flex" *ngIf="designs.length > 0">
-            <div class="design" *ngFor="let design of designs">
-                <div class="design-cover size-h--250 size-w--full">
-                    <img class="size-h--250 size-w--full" src="https://bigocommercetest.blob.core.windows.net/bigocommerce/e2c784591e4c4349/front.png"/>
+        <div class="flex flex-wrap" *ngIf="designs.length > 0">
+            <div class="design bg--white" *ngFor="let design of designs">
+                <div class="design-cover">
+                    <img class="size-h--200 size-w--200" [src]="design.image" onError="this.src='assets/images/blank.png';"/>
                 </div>
-                <div class="design-meta size-h--50 size-w--full relative">
+                <div class="design-meta size-w--full pa--10 relative">
                     <span class="design-meta-title">{{design.title}}</span>
-                    <span class="design-meta-subtitle">{{design.guid}}</span>
+                    <span class="design-meta-subtitle">{{design.sku}}</span>
                 </div>
             </div>
         </div>

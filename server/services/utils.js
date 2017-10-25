@@ -25,7 +25,7 @@ exports.cropImage = function(pathToFile, size){
         });
     })
     .catch( err => {
-        console.log(error);
+        deferred.reject(new Error(err));
     });
     
     return deferred.promise;
@@ -46,7 +46,7 @@ exports.resizeImageMax = function(pathToFile, width, height){
         });
     })
     .catch( err => {
-        deferred.reject(new Error(error));
+        deferred.reject(new Error(err));
     });
     
     return deferred.promise;
@@ -66,7 +66,7 @@ exports.resizeImage = function(pathToFile, width, height){
         });
     })
     .catch( err => {
-        deferred.reject(new Error(error));
+        deferred.reject(new Error(err));
     });
     
     return deferred.promise;
@@ -246,4 +246,20 @@ exports.getSizeMap = function(printfulSize) {
     }
     
     return amznSize;
+}
+
+exports.notifySocket = function(io, socketId, guid, status, variantsUploadState, message){
+    if(io.sockets.connected[socketId]!=null) {
+        
+        var notification = {
+            guid: guid,
+            totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,
+            totalVariantsUploaded: variantsUploadState ? variantsUploadState.totalVariantsUploaded : 0,
+            status: status,
+            message: message
+        };
+
+        console.log(notification);
+        io.sockets.connected[socketId].emit('notification', notification);
+    }
 }

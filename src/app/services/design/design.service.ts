@@ -27,13 +27,12 @@ export class DesignService {
     formData.append("guid", design.guid);
     formData.append("title", design.title);
     formData.append("keywords", design.keywords);
-    formData.append("frontPrint", design.frontPrint, design.frontPrint['name']);
-    //formData.append("outsideLabelPrint", design.outsideLabelPrint, design.outsideLabelPrint['name']);
+    formData.append("frontPrint_1800_2400", design.frontPrint_1800_2400, design.frontPrint_1800_2400['name']);
+    formData.append("frontPrint_1500_1800", design.frontPrint_1500_1800, design.frontPrint_1500_1800['name']);
+    formData.append("frontPrint_1500_1500", design.frontPrint_1500_1500, design.frontPrint_1500_1500['name']);
+    formData.append("socketId", design.socketId);
     
-    return this.authHttp.post(this.backendUrl + 'design/create', formData)
-      .toPromise();
-      // .map(files => files.json())
-      // .subscribe(files => console.log('files', files))
+    return this.authHttp.post(this.backendUrl + 'design/create', formData).toPromise();
   }
 
   // Implement a method to handle errors if any

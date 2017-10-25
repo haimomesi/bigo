@@ -74,6 +74,10 @@ export class AuthService {
     this.setLoggedIn(true);
   }
 
+  getProfile(){
+    return JSON.parse(localStorage.getItem('profile'));
+  }
+
   logout() {
     // Remove tokens and profile and update login status subject
     localStorage.removeItem('token');
@@ -85,6 +89,7 @@ export class AuthService {
 
   get authenticated() {
     // Check if there's an unexpired access token
+    console.log('checking tokenNotExpired');
     return tokenNotExpired('token');
   }
 

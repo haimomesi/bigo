@@ -9,7 +9,7 @@
     
     <div class="modal-body">
         <div class="modal-body-content">Fill all fields to upload new design</div>
-        <app-design-form #modalForm class="modal-form"></app-design-form>
+        <app-design-form #modalForm (notify)="onNotify()" class="modal-form"></app-design-form>
     </div>
   </div>
 </div>

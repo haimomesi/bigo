@@ -9,11 +9,21 @@
       <input type="text" required [(ngModel)]="design.keywords" name="designKeywords" class="form-control pl--15" id="designKeywords" placeholder="Keywords">
     </div>
     <div class="flex flex--space-between mb--20">
-      <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designFront.invalid}">
-        <label for="designFront">Front print</label>
-        <app-picture-uploader #picture class="pl--15" required (notify)="onNotify($event, 'frontPrint')" id="designFront" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
-        <input type="hidden" name="designFront" [(ngModel)]="design.frontPrint">
+      <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designFront_1800_2400.invalid}">
+        <label for="designFront_1800_2400">Front print (1800x2400)</label>
+        <app-picture-uploader #picturePart class="pl--15" required (notify)="onNotify($event, 'frontPrint_1800_2400')" id="designFront_1800_2400" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
+        <input type="hidden" name="designFront_1800_2400" [(ngModel)]="design.frontPrint_1800_2400">
       </div>
+      <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designFront_1500_1800.invalid}">
+          <label for="designFront_1500_1800">Front print (1500x1800)</label>
+          <app-picture-uploader #picturePart class="pl--15" required (notify)="onNotify($event, 'frontPrint_1500_1800')" id="designFront_1500_1800" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
+          <input type="hidden" name="designFront_1500_1800" [(ngModel)]="design.frontPrint_1500_1800">
+        </div>
+        <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designFront_1500_1500.invalid}">
+            <label for="designFront_1500_1500">Front print (1500x1500)</label>
+            <app-picture-uploader #picturePart class="pl--15" required (notify)="onNotify($event, 'frontPrint_1500_1500')" id="designFront_1500_1500" [defaultPicture]="defaultFrontPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
+            <input type="hidden" name="designFront_1500_1500" [(ngModel)]="design.frontPrint_1500_1500">
+          </div>
       <!-- <div class="form-group flex--column mb--10" [ngClass]="{'has-error': designForm.submitted && designForm.controls.designOutsideLabel.invalid}">
         <label for="designOutsideLabel">Outside label</label>
         <app-picture-uploader class="pl--15" required (notify)="onNotify($event, 'outsideLabelPrint')" id="designOutsideLabel" [defaultPicture]="defaultOutsideLabelPicture" [uploaderOptions]="uploaderOptions"></app-picture-uploader>
