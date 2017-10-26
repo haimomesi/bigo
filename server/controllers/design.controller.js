@@ -14,7 +14,7 @@ require('rxjs/add/operator/catch');
 require('rxjs/add/observable/timer');
 require('rxjs/add/observable/fromPromise');
 
-function DesignController(io){
+function DesignController(wss){
     
     const ctrl = {};
     
@@ -86,7 +86,7 @@ function DesignController(io){
             let frontDestinations = {};
             
             //notify user thru socket
-            utils.notifySocket(io, socketId, itemGuid, 'pending', null, 'Fetching products from Printful');
+            utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Fetching products from Printful');
             
             printfulSvc.get('products')
             .then(function(productsResponse){
@@ -106,7 +106,7 @@ function DesignController(io){
             })
             .then(function(productsPrintFilesResults){
                 
-                utils.notifySocket(io, socketId, itemGuid, 'pending', null, 'Collecting variants from products');
+                utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Collecting variants from products');
                 
                 productsPrintFilesResults.forEach(function(productDetails) {
                     if (productDetails) {
@@ -189,7 +189,7 @@ function DesignController(io){
             })
             .then(function(resizedImageStreams){
                 
-                utils.notifySocket(io, socketId, itemGuid, 'pending', null, 'Uploading designs to Blob storage');
+                utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Uploading designs to Blob storage');
                 
                 let azureTemps = [];
                 
@@ -257,7 +257,7 @@ function DesignController(io){
                     generateMockups.push(printfulSvc.post(generateMockupResource, generateMockupBody));
                 }
                 
-                utils.notifySocket(io, socketId, itemGuid, 'pending', null, 'Uploading mockups to Printful');
+                utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Uploading mockups to Printful');
                 return Q.all(generateMockups);
             })
             .then(function(generateMockupsResults){  
@@ -294,7 +294,7 @@ function DesignController(io){
                 Rx.Observable.forkJoin(mockupGeneratorSubscriptions)
                 .subscribe(t => {
                     
-                    utils.notifySocket(io, socketId, itemGuid, 'pending', null, 'Pushing products to SureDone');
+                    utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Pushing products to SureDone');
                     
                     //first get total variants count
                     t.forEach(mockups => {
@@ -326,7 +326,7 @@ function DesignController(io){
                         
                         azureSvc.uploadBlobFromUrl(firstMockup.mockup_url, mockupDestination)
                         .then(function(x){
-                            suredoneSvc.uploadParentToSureDone(io, socketId, variantsUploadState, productsCalculatedVariants, colors, productsByKey, itemGuid, repVariant, repVariantColor, allVariantsUnderColorCode[0], product, mockupDestination, allVariantsUnderColorCode, mockups);
+                            suredoneSvc.uploadParentToSureDone(wss, socketId, variantsUploadState, productsCalculatedVariants, colors, productsByKey, itemGuid, repVariant, repVariantColor, allVariantsUnderColorCode[0], product, mockupDestination, allVariantsUnderColorCode, mockups);
                         });
                     });
                     
@@ -334,7 +334,7 @@ function DesignController(io){
                 
             })
             .catch(function(err) {
-                utils.notifySocket(io, socketId, itemGuid, 'error', null, err);
+                utils.notifySocket(wss, socketId, itemGuid, 'error', null, err);
                 console.error(err);
             });
         });

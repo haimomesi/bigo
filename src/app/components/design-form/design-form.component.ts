@@ -30,7 +30,7 @@ export class DesignFormComponent {
   onSubmit() { 
     var self = this;
     if (this.designForm.valid) {
-      this.design.socketId = this.sharedService.socket.id;
+      this.design.socketId = this.sharedService.socketId;
       this.designService.create(this.design)
       .then(function(response){
         self.notify.emit();

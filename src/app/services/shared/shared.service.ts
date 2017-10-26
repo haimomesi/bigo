@@ -1,15 +1,26 @@
 import { Injectable } from '@angular/core';
-import * as io from 'socket.io-client';
+//import * as io from 'socket.io-client';
 import { environment } from '../../../environments/environment';
+//import WebSocket from 'ws';
 
 @Injectable()
 export class SharedService {
   
   //public mainLoading: boolean = false;
-  public socket = io(environment.resource, {
-    transports: ['websocket']
-  });
+  public socketId;
+  public socket;
   
-  constructor() {}
+  constructor() {
+    let ws_type = environment.production ? 'wss' : 'ws';
+    this.socketId = this.newGuid();
+    this.socket= new WebSocket(`${ws_type}://${environment.resource}/?socketId=${this.socketId}`);
+  }
+
+  newGuid() {
+    return 'xxxxxxxxxxxxyxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+}
   
 }

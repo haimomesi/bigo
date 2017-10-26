@@ -12,7 +12,7 @@ export class NotificationService{
   public notificationsComponent: NotificationsComponent;
   private gsNotificationsAnimation: TimelineMax;
   private listenerFn;
-  private socket;
+  //private socket;
   
   constructor(private sharedService: SharedService) { }
   
@@ -27,11 +27,13 @@ export class NotificationService{
   getNotifications() {
     let observable = new Observable(observer => {
       
-      this.sharedService.socket.on('notification', (notification: AppNotification) => {
+      this.sharedService.socket.onmessage = function(evt) {
+        let notification: AppNotification = JSON.parse(evt.data);
         observer.next(notification);    
-      });
+      };
+
       return () => {
-        this.socket.disconnect();
+        this.sharedService.socket.close();
       };  
     })     
     return observable;

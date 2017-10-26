@@ -1,7 +1,8 @@
-var sharp = require('sharp');
-var Duplex = require('stream').Duplex; 
-var Q = require('q');
-var fs = require('fs');
+const sharp = require('sharp');
+const Duplex = require('stream').Duplex; 
+const Q = require('q');
+const fs = require('fs');
+const WebSocket = require('ws');
 
 function bufferToStream(buffer) {  
     let stream = new Duplex();
@@ -248,18 +249,31 @@ exports.getSizeMap = function(printfulSize) {
     return amznSize;
 }
 
-exports.notifySocket = function(io, socketId, guid, status, variantsUploadState, message){
-    if(io.sockets.connected[socketId]!=null) {
-        
-        var notification = {
-            guid: guid,
-            totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,
-            totalVariantsUploaded: variantsUploadState ? variantsUploadState.totalVariantsUploaded : 0,
-            status: status,
-            message: message
-        };
+exports.notifySocket = function(wss, socketId, guid, status, variantsUploadState, message){
+    
+    wss.clients.forEach(function each(client) {
+        if (client.socketId === socketId && client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({
+                guid: guid,
+                totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,
+                totalVariantsUploaded: variantsUploadState ? variantsUploadState.totalVariantsUploaded : 0,
+                status: status,
+                message: message
+            }));
+        }
+    });
 
-        console.log(notification);
-        io.sockets.connected[socketId].emit('notification', notification);
-    }
+    // if(io.sockets.connected[socketId]!=null) {
+    
+    //     var notification = {
+    //         guid: guid,
+    //         totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,
+    //         totalVariantsUploaded: variantsUploadState ? variantsUploadState.totalVariantsUploaded : 0,
+    //         status: status,
+    //         message: message
+    //     };
+    
+    //     console.log(notification);
+    //     io.sockets.connected[socketId].emit('notification', notification);
+    // }
 }

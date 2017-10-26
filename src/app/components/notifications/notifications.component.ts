@@ -24,6 +24,8 @@ export class NotificationsComponent implements OnInit {
     this.notificationsService.register(this);
 
     this.notificationsService.getNotifications().subscribe((notification:AppNotification) => {
+
+      console.log('notification');
     
       let existingNotification:AppNotification = this.notifications.filter((n: AppNotification) => {
         return n.guid == notification.guid;
@@ -40,7 +42,7 @@ export class NotificationsComponent implements OnInit {
 
         if(status == 'success')
         {
-          
+
         }
       }
       else{

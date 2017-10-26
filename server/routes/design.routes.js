@@ -17,14 +17,14 @@ const jwtCheck = jwt({
 
 //module.exports = router;
 
-module.exports = function(app, io) {
+module.exports = function(app, wss) {
     
     const router = express.Router();
-    const design_controller = require('../controllers/design.controller')(io);
+    const design_controller = require('../controllers/design.controller')(wss);
     
     router.get('/', (req, res) => {
 
-        console.log(io);
+        //console.log(io);
 
         let formBody = {};
         let itemGuid = '123';

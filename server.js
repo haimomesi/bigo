@@ -3,13 +3,15 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
+const WebSocket = require('ws');
+const url = require('url');
+//const fs = require('fs');
 
 //auth
 const cors = require('cors');
 
 // Get our API routes
 const api = require('./server/routes/api');
-
 
 const app = express();
 
@@ -22,8 +24,16 @@ app.use(cors());
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Set our api routes
-//app.use('/api', api);
+// app.get('/.well-known/acme-challenge/:fileId', function(req, res){
+//     var p = path.join(__dirname, '/../../.well-known/acme-challenge/'+ req.params.fileId);
+//     // var output = '';
+//     // fs.readdirSync(testFolder).forEach(file => {
+//     //   output += file;
+//     // })
+//     var r = fs.readFileSync(p).toString();
+//     //res.sendFile(p, {dotfiles: 'allow'});
+//     res.send(r);
+// });
 
 /**
 * Get port from environment and store in Express.
@@ -35,23 +45,26 @@ app.set('port', port);
 * Create HTTP server.
 */
 const server = http.createServer(app);
-const io = require('socket.io')(server);
+const wss = new WebSocket.Server({ server: server, clientTracking: true });
 
-io.set('transports', ['websocket']);
-
-io.on('connection', (socket) => {
-  //console.log('user connected');
-  
-  socket.on('disconnect', function(){
-    //console.log('user disconnected');
-  });
-  
-  // socket.on('add-message', (message) => {
-  //   io.emit('message', {type:'new-message', text: message});    
-  // });
+wss.on('connection', function connection(ws, req) {
+  const params = url.parse(req.url, true).query;
+  ws.socketId = params.socketId;
 });
 
-require('./server/routes/design.routes')(app, io);
+require('./server/routes/design.routes')(app, wss);
+
+//const io = require('socket.io')(server);
+
+// io.on('connection', (socket) => {
+//   console.log('user connected');
+
+//   socket.on('disconnect', function(){
+//     console.log('user disconnected');
+//   });
+// });
+
+//require('./server/routes/design.routes')(app, io);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {

@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   redirectCallback: 'http://localhost:3000/callback',
-  resource: 'http://localhost:3000'
+  resource: 'localhost:3000'
 };
