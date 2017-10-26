@@ -6,7 +6,9 @@ import { environment } from '../../../environments/environment';
 export class SharedService {
   
   //public mainLoading: boolean = false;
-  public socket = io(environment.resource);
+  public socket = io(environment.resource, {
+    transports: ['websocket']
+  });
   
   constructor() {}
   

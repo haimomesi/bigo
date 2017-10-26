@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  redirectCallback: 'http://bigocomcommerce.azurewebsites.net/callback',
+  redirectCallback: 'http://bigocommerce.azurewebsites.net/callback',
   resource: 'http://bigocommerce.azurewebsites.net'
 };

@@ -37,6 +37,8 @@ app.set('port', port);
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 
+io.set('transports', ['websocket']);
+
 io.on('connection', (socket) => {
   //console.log('user connected');
   
