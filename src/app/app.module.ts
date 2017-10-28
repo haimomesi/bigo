@@ -25,6 +25,7 @@ import { NotificationService } from './services/notification/notification.servic
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ClickStopPropagationDirective } from './directives/click-stop-propagation.directive';
 import { SavingDotsComponent } from './components/saving-dots/saving-dots.component';
+import { RefreshComponent } from './components/refresh/refresh.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { SavingDotsComponent } from './components/saving-dots/saving-dots.compon
     ProfileMenuComponent,
     NotificationsComponent,
     ClickStopPropagationDirective,
-    SavingDotsComponent
+    SavingDotsComponent,
+    RefreshComponent
   ],
   imports: [
     HttpModule,

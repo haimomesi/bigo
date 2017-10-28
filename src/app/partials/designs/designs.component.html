@@ -1,7 +1,7 @@
 <app-route-header name="My Designs" (onAdd)="addDesign()"></app-route-header>
 <div class="plr--80 pt--100 size-h--calc-105 overflow--auto">
     <!--No Designs-->
-    <div *ngIf="designs.length == 0" class="no-designs">
+    <div *ngIf="sharedService.designs.length == 0" class="no-designs">
         <div>
             <div class="no-designs-bucket text--center flex--column">
                 <span class="icon">
@@ -19,8 +19,8 @@
             </div>
         </div>
         <!--Designs-->
-        <div class="flex flex-wrap" *ngIf="designs.length > 0">
-            <div class="design bg--white" *ngFor="let design of designs">
+        <div class="flex flex-wrap" *ngIf="sharedService.designs.length > 0">
+            <div class="design bg--white" *ngFor="let design of sharedService.designs">
                 <div class="design-cover">
                     <img class="size-h--200 size-w--200" [src]="design.image" onError="this.src='assets/images/blank.png';"/>
                 </div>

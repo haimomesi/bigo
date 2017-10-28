@@ -4,6 +4,7 @@ import 'gsap';
 import { TweenLite } from 'gsap';
 import { Renderer2Service } from '../../services/utils/renderer2.service';
 import { NotificationService } from '../../services/notification/notification.service';
+import { AppNotification } from '../../shared/classes/notification';
 
 @Component({
   selector: 'app-modal',
@@ -32,8 +33,8 @@ export class ModalComponent implements OnInit  {
     this.modalService.close(this.modalId, checkBlocking);
   }
 
-  onNotify() {
+  onNotify(notification: AppNotification) {
     this.close();
-    this.notificationService.open(0.65);
+    this.notificationService.open(0.65, notification);
   }
 }

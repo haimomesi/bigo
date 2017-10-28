@@ -5,4 +5,6 @@ export class AppNotification {
     status: string;
     progress: number;
     message: string;
+    title: string;
+    img: string;
 }

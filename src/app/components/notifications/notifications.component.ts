@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../services/notification/notification.service';
 import { Renderer2Service } from '../../services/utils/renderer2.service';
 import { AppNotification } from '../../shared/classes/notification';
+import { SharedService } from '../../services/shared/shared.service';
 
 @Component({
   selector: 'app-notifications',
@@ -15,7 +16,7 @@ export class NotificationsComponent implements OnInit {
   isOpen = false;
   notifications = [];
 
-  constructor(private notificationsService: NotificationService, rendererService: Renderer2Service) { 
+  constructor(private notificationsService: NotificationService, rendererService: Renderer2Service, private sharedService: SharedService) { 
     this.renderer = rendererService.getRenderer();
   }
 
@@ -24,8 +25,6 @@ export class NotificationsComponent implements OnInit {
     this.notificationsService.register(this);
 
     this.notificationsService.getNotifications().subscribe((notification:AppNotification) => {
-
-      console.log('notification');
     
       let existingNotification:AppNotification = this.notifications.filter((n: AppNotification) => {
         return n.guid == notification.guid;
@@ -40,9 +39,13 @@ export class NotificationsComponent implements OnInit {
         existingNotification.progress = progress;
         existingNotification.message = notification.message;
 
-        if(status == 'success')
+        if(notification.status == 'success')
         {
-
+          this.sharedService.designs.push({
+            image: existingNotification.img,
+            title: existingNotification.title,
+            sku: existingNotification.guid
+          });
         }
       }
       else{

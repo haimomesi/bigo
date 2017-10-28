@@ -1,7 +1,7 @@
 const storage = require('azure-storage');
 const azureConfig = require('../config/config').azure;
 const Q = require('q');
-const request = require('request');
+const request = require('requestretry');
 
 let extToMimes = {
     'img': 'image/jpeg',
@@ -76,12 +76,27 @@ exports.uploadBlobFromUrl = function(sourceUrl, fileName) {
     // Upload a BlockBlob to the newly created container
     
     var deferred = Q.defer();
+
+    console.log('uploadBlobFromUrl ' + sourceUrl);
     
     //fetch image from url and pipe it down to azure blob service
-    request(sourceUrl).pipe(blobService.createWriteStreamToBlockBlob(blockBlobContainerName, blockBlobName, {contentSettings: {contentType: mime}} ,function (error) {
+    var options = {
+        url: sourceUrl,
+        strictSSL: false,
+        secureProtocol: 'TLSv1_method'
+    };
+
+    request(options)
+    .on('error', function(err) { 
+        console.log('uploadBlobFromUrl request error ' + sourceUrl);
+        deferred.reject(new Error(err));
+     })
+    .pipe(blobService.createWriteStreamToBlockBlob(blockBlobContainerName, blockBlobName, {timeoutIntervalInMs:240000, clientRequestTimeoutInMs: 240000 , contentSettings: {contentType: mime}} ,function (error) {
         if (error){
+            console.log('uploadBlobFromUrl error ' + sourceUrl);
             deferred.reject(new Error(error));
         } else{
+            console.log('uploadBlobFromUrl success ' + sourceUrl);
             deferred.resolve();
         }
     }));

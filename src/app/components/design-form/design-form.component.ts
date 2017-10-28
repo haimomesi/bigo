@@ -31,9 +31,18 @@ export class DesignFormComponent {
     var self = this;
     if (this.designForm.valid) {
       this.design.socketId = this.sharedService.socketId;
+      self.notify.emit({
+        guid: self.design.guid,
+        status: 'pending',
+        message: 'Uploading design to server',
+        totalVariantsUploaded: 0,
+        totalVariants: 0,
+        title: self.design.title,
+        img: self.pictureParts.last.picture
+      });
       this.designService.create(this.design)
       .then(function(response){
-        self.notify.emit();
+        //self.notify.emit();
       });
     }
   }

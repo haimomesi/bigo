@@ -31,7 +31,7 @@ export class NotificationService{
         let notification: AppNotification = JSON.parse(evt.data);
         observer.next(notification);    
       };
-
+      
       return () => {
         this.sharedService.socket.close();
       };  
@@ -39,11 +39,13 @@ export class NotificationService{
     return observable;
   }
   
-  open(delay = 0): void {
+  open(delay = 0, notification: AppNotification = null): void {
     var self = this;
     
+    if(notification)this.notificationsComponent.notifications.push(notification);
+    
     this.notificationsComponent.isOpen = true;
-
+    
     this.gsNotificationsAnimation = new TimelineMax({ delay: delay, paused: true, onComplete:this.onOpen, onCompleteParams: [self], onReverseComplete: this.onClose, onReverseCompleteParams:[self] });
     
     this.gsNotificationsAnimation
@@ -53,9 +55,9 @@ export class NotificationService{
     this.gsNotificationsAnimation.play();
     
   }
-
+  
   close(): void {
-      this.gsNotificationsAnimation.reverse();
+    this.gsNotificationsAnimation.reverse();
   }
   
   onOpen(self){

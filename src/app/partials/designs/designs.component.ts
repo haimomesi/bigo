@@ -13,12 +13,11 @@ import { SharedService } from '../../services/shared/shared.service';
 export class DesignsComponent implements OnInit {
   
   modalId: string = 'newDesignModal';
-  designs: Array<Design> = [];
 
-  constructor(private modalService: ModalService, private route: ActivatedRoute) {}
+  constructor(private modalService: ModalService, private route: ActivatedRoute, private sharedService: SharedService) {}
 
   ngOnInit() {
-    this.designs = this.route.snapshot.data['designs'];
+    this.sharedService.designs = this.route.snapshot.data['designs'];
   }
 
   addDesign(){

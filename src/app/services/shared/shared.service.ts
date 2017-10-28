@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 //import * as io from 'socket.io-client';
 import { environment } from '../../../environments/environment';
+import { Design } from '../../shared/classes/design';
 //import WebSocket from 'ws';
 
 @Injectable()
@@ -9,6 +10,8 @@ export class SharedService {
   //public mainLoading: boolean = false;
   public socketId;
   public socket;
+  public refresh: boolean;
+  public designs = [];
   
   constructor() {
     let ws_type = environment.production ? 'wss' : 'ws';

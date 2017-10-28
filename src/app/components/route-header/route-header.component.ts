@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-route-header',
@@ -12,13 +13,17 @@ export class RouteHeaderComponent implements OnInit {
 
   appName: string = 'O';
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
   add(): void {
     this.onAdd.emit();
+  }
+
+  home(): void {
+    this.router.navigate(['']);
   }
 
 }

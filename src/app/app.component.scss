@@ -2,6 +2,20 @@
 
 .navbar {
     padding-bottom: 152px;
+
+    &:after{
+        background: linear-gradient(to right, #fcac00 0%, #fdb515 2%, #fca91d 10%, #f98932 26%, #f45454 47%, #ed0d83 73%, #ec008c 77%, #fc008c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 32px;
+        text-transform: uppercase;
+        content: 'O';
+        left: 60px;
+        position: relative;
+        top: 10px;
+    }
 }
 
 .navbar-content-group {

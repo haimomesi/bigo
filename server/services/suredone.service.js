@@ -16,7 +16,8 @@ exports.get = function(endpoint){
         method: 'GET',
         url: 'https://' + suredoneConfig.API_path + '/v1/' + endpoint,
         headers: suredoneHeaders,
-        json: true
+        json: true,
+        timeout: 240000
     };
     
     //send request
@@ -29,9 +30,10 @@ let post = function(endpoint, body){
         method: 'POST',
         url: 'https://' + suredoneConfig.API_path + '/v1/' + endpoint,
         headers: suredoneHeaders,
-        form: body
+        form: body,
+        timeout: 240000
     };
-    
+
     //send request
     return rp(options);
 };
@@ -40,36 +42,36 @@ var uploadVariantToSureDone = function(io, socketId, variantsUploadState, itemGu
     
     let formBody = {};
     
-    formBody['identifier'] = 'guid';
-    formBody['guid'] = `${itemGuid}-${repVariant.product_id}-${repVariantColor}-${variantsUnderColorCode.id}`;
-    formBody['sku'] = `${itemGuid}-${repVariant.product_id}`;
-    formBody['partnumber'] = formBody['guid'];
-    formBody['cost'] = variantsUnderColorCode.price;
-    formBody['stock'] = '1000';
-    formBody['price'] = Math.ceil(parseFloat(variantsUnderColorCode.price) * 1.3).toString();
-    formBody['title'] = `${product.title} ${product.model}`;
-    formBody['media1'] = `${azureConfig.base_url}${azureConfig.container}/${mockupDestination}`;
-    formBody['brand'] = 'DollarScent';
-    formBody['description'] = product.description;
-    formBody['size'] = utils.getSizeMap(variantsUnderColorCode.size);
-    formBody['color'] = variantsUnderColorCode.color;
-    formBody['colorCode'] = repVariantColor;
-    formBody['colormap'] = utils.getColorMap(variantsUnderColorCode.color);
-    formBody['department'] = product.department;
-    formBody['amznitemtype'] = product.amznitemtype;
-    formBody['amzncategory'] = '5';
-    formBody['registeredparameter'] = 'PrivateLabel';
-    formBody['variationtheme'] = 'sizecolor';
-    formBody['condition'] = 'New';
-    formBody['variantid'] = variantsUnderColorCode.id;
-    formBody['keywords'] = product.keywords;
-    formBody['frontsize'] = `${repVariant.front.width}_${repVariant.front.height}`;
+    formBody.identifier = 'guid';
+    formBody.guid = `${itemGuid}-${repVariant.product_id}-${repVariantColor}-${variantsUnderColorCode.id}`;
+    formBody.sku = `${itemGuid}-${repVariant.product_id}`;
+    formBody.partnumber = formBody.guid;
+    formBody.cost = variantsUnderColorCode.price;
+    formBody.stock = '1000';
+    formBody.price = Math.ceil(parseFloat(variantsUnderColorCode.price) * 1.3).toString();
+    formBody.title = `${product.title} ${product.model}`;
+    formBody.media1 = `${azureConfig.base_url}${azureConfig.container}/${mockupDestination}`;
+    formBody.brand = 'DollarScent';
+    formBody.description = product.description;
+    formBody.size = utils.getSizeMap(variantsUnderColorCode.size);
+    formBody.color = variantsUnderColorCode.color;
+    formBody.colorCode = repVariantColor;
+    formBody.colormap = utils.getColorMap(variantsUnderColorCode.color);
+    formBody.department = product.department;
+    formBody.amznitemtype = product.amznitemtype;
+    formBody.amzncategory = '5';
+    formBody.registeredparameter = 'PrivateLabel';
+    formBody.variationtheme = 'sizecolor';
+    formBody.condition = 'New';
+    formBody.variantid = variantsUnderColorCode.id;
+    formBody.keywords = product.keywords;
+    formBody.frontsize = `${repVariant.front.width}_${repVariant.front.height}`;
     
-    if (product.hasOwnProperty('bulletpoint1')) formBody['bulletpoint1'] = product.bulletpoint1;
-    if (product.hasOwnProperty('bulletpoint2')) formBody['bulletpoint2'] = product.bulletpoint2;
-    if (product.hasOwnProperty('bulletpoint3')) formBody['bulletpoint3'] = product.bulletpoint3;
-    if (product.hasOwnProperty('bulletpoint4')) formBody['bulletpoint4'] = product.bulletpoint4;
-    if (product.hasOwnProperty('bulletpoint5')) formBody['bulletpoint5'] = product.bulletpoint5;
+    if (product.hasOwnProperty('bulletpoint1')) formBody.bulletpoint1 = product.bulletpoint1;
+    if (product.hasOwnProperty('bulletpoint2')) formBody.bulletpoint2 = product.bulletpoint2;
+    if (product.hasOwnProperty('bulletpoint3')) formBody.bulletpoint3 = product.bulletpoint3;
+    if (product.hasOwnProperty('bulletpoint4')) formBody.bulletpoint4 = product.bulletpoint4;
+    if (product.hasOwnProperty('bulletpoint5')) formBody.bulletpoint5 = product.bulletpoint5;
     
     variantsUploadState.totalVariantsProcessed++;
     console.log('variants proccessed: ' + variantsUploadState.totalVariantsProcessed + '. current variant: ' + variantsUnderColorCode.id);
@@ -91,43 +93,46 @@ exports.uploadParentToSureDone = function(io, socketId, variantsUploadState, pro
     
     let formBody = {};
     
-    formBody['identifier'] = 'guid';
-    formBody['guid'] = `${itemGuid}-${repVariant.product_id}`;
-    formBody['sku'] = `${itemGuid}-${repVariant.product_id}`;
-    formBody['partnumber'] = formBody['guid'];
-    formBody['cost'] = variantsUnderColorCode.price;
-    formBody['stock'] = '0';
-    formBody['price'] = Math.ceil(parseFloat(variantsUnderColorCode.price) * 1.3).toString();
-    formBody['title'] = `${product.title} ${product.model}`;
-    formBody['media1'] = `${azureConfig.base_url}${azureConfig.container}/${mockupDestination}`;
-    formBody['brand'] = 'DollarScent';
-    formBody['description'] = product.description;
-    formBody['size'] = utils.getSizeMap(variantsUnderColorCode.size);
-    formBody['color'] = variantsUnderColorCode.color;
-    formBody['colorCode'] = repVariantColor;
-    formBody['colormap'] = utils.getColorMap(variantsUnderColorCode.color);
-    formBody['department'] = product.department;
-    formBody['amznitemtype'] = product.amznitemtype;
-    formBody['amzncategory'] = '5';
-    formBody['registeredparameter'] = 'PrivateLabel';
-    formBody['variationtheme'] = 'sizecolor';
-    formBody['condition'] = 'New';
-    formBody['variantid'] = variantsUnderColorCode.id;
-    formBody['keywords'] = product.keywords;
-    formBody['frontsize'] = `${repVariant.front.width}_${repVariant.front.height}`;
+    formBody.identifier = 'guid';
+    formBody.guid = `${itemGuid}-${repVariant.product_id}`;
+    formBody.sku = `${itemGuid}-${repVariant.product_id}`;
+    formBody.partnumber = formBody.guid;
+    formBody.cost = variantsUnderColorCode.price;
+    formBody.stock = '0';
+    formBody.price = Math.ceil(parseFloat(variantsUnderColorCode.price) * 1.3).toString();
+    formBody.title = `${product.title} ${product.model}`;
+    formBody.media1 = `${azureConfig.base_url}${azureConfig.container}/${mockupDestination}`;
+    formBody.brand = 'DollarScent';
+    formBody.description = product.description;
+    formBody.size = utils.getSizeMap(variantsUnderColorCode.size);
+    formBody.color = variantsUnderColorCode.color;
+    formBody.colorCode = repVariantColor;
+    formBody.colormap = utils.getColorMap(variantsUnderColorCode.color);
+    formBody.department = product.department;
+    formBody.amznitemtype = product.amznitemtype;
+    formBody.amzncategory = '5';
+    formBody.registeredparameter = 'PrivateLabel';
+    formBody.variationtheme = 'sizecolor';
+    formBody.condition = 'New';
+    formBody.variantid = variantsUnderColorCode.id;
+    formBody.keywords = product.keywords;
+    formBody.frontsize = `${repVariant.front.width}_${repVariant.front.height}`;
     
-    if (product.hasOwnProperty('bulletpoint1')) formBody['bulletpoint1'] = product.bulletpoint1;
-    if (product.hasOwnProperty('bulletpoint2')) formBody['bulletpoint2'] = product.bulletpoint2;
-    if (product.hasOwnProperty('bulletpoint3')) formBody['bulletpoint3'] = product.bulletpoint3;
-    if (product.hasOwnProperty('bulletpoint4')) formBody['bulletpoint4'] = product.bulletpoint4;
-    if (product.hasOwnProperty('bulletpoint5')) formBody['bulletpoint5'] = product.bulletpoint5;
+    if (product.hasOwnProperty('bulletpoint1')) formBody.bulletpoint1 = product.bulletpoint1;
+    if (product.hasOwnProperty('bulletpoint2')) formBody.bulletpoint2 = product.bulletpoint2;
+    if (product.hasOwnProperty('bulletpoint3')) formBody.bulletpoint3 = product.bulletpoint3;
+    if (product.hasOwnProperty('bulletpoint4')) formBody.bulletpoint4 = product.bulletpoint4;
+    if (product.hasOwnProperty('bulletpoint5')) formBody.bulletpoint5 = product.bulletpoint5;
     
     if(!variantsUploadState.designRepresentativeSet){
         variantsUploadState.designRepresentativeSet = true;
-        formBody['designrep'] = '1';
+        formBody.designrep = '1';
     } 
     
+    console.log('product proccessed: ' + repVariant.product_id);
+
     post('editor/items/start', formBody).then((x) => {
+        console.log('product uploaded: ' + repVariant.product_id);
         allVariantsUnderColorCode.forEach(variantsUnderColorCode => {
             uploadVariantToSureDone(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
         });

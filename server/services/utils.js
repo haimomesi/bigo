@@ -2,7 +2,7 @@ const sharp = require('sharp');
 const Duplex = require('stream').Duplex; 
 const Q = require('q');
 const fs = require('fs');
-const WebSocket = require('ws');
+const ws = require('ws');
 
 function bufferToStream(buffer) {  
     let stream = new Duplex();
@@ -210,10 +210,10 @@ exports.getColorMap = function(printfulColor) {
     }
     
     return amznColor;
-}
+};
 
 exports.getSizeMap = function(printfulSize) {
-    var amznSize = '';
+    let amznSize = '';
     
     switch (printfulSize) {
         case 'XS':
@@ -252,7 +252,7 @@ exports.getSizeMap = function(printfulSize) {
 exports.notifySocket = function(wss, socketId, guid, status, variantsUploadState, message){
     
     wss.clients.forEach(function each(client) {
-        if (client.socketId === socketId && client.readyState === WebSocket.OPEN) {
+        if (client.socketId === socketId && client.readyState === ws.OPEN) {
             client.send(JSON.stringify({
                 guid: guid,
                 totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,

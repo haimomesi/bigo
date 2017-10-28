@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
-const WebSocket = require('ws');
+const ws = require('ws');
 const url = require('url');
 //const fs = require('fs');
 
@@ -41,11 +41,18 @@ app.use(express.static(path.join(__dirname, 'dist')));
 const port = process.env.PORT || '3000';
 app.set('port', port);
 
+// if(port == '3000')
+// {
+//   require('request').debug = true;
+//   require('request-promise').debug = true;
+// }
+
 /**
 * Create HTTP server.
 */
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server: server, clientTracking: true });
+server.setTimeout(240000);
+const wss = new ws.Server({ server: server, clientTracking: true });
 
 wss.on('connection', function connection(ws, req) {
   const params = url.parse(req.url, true).query;
