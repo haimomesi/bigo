@@ -1,3 +1,3 @@
-<div *ngIf="authService.loggedIn && !authService.authenticated" class="app-refresh absolute--full bg--mask">
+<div *ngIf="shouldRefresh()" class="app-refresh absolute--full bg--mask">
   <div class="app-refresh-button absolute button primary" (click)="refresh()">Refresh</div>
 </div>

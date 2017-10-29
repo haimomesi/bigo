@@ -7,13 +7,17 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./refresh.component.scss']
 })
 export class RefreshComponent implements OnInit {
-
+  
   constructor(public authService:AuthService) { }
-
+  
   ngOnInit() {
   }
-
+  
   refresh() {
     window.location.reload();
+  }
+  
+  shouldRefresh(){
+      return this.authService.loggedIn && !this.authService.authenticated;
   }
 }

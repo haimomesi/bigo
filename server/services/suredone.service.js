@@ -3,6 +3,7 @@ const suredoneConfig = require('../config/config').suredone;
 const azureConfig = require('../config/config').azure;
 const azureSvc = require('../services/azureBlob.service');
 const rp = require('request-promise');
+const requestretry = require('requestretry');
 
 const suredoneHeaders = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -31,12 +32,26 @@ let post = function(endpoint, body){
         url: 'https://' + suredoneConfig.API_path + '/v1/' + endpoint,
         headers: suredoneHeaders,
         form: body,
-        timeout: 240000
+        //agent: agent
     };
-
+    
     //send request
     return rp(options);
 };
+
+let postretry = function(endpoint, body) {
+
+    var options = {
+        method: 'POST',
+        url: 'https://' + suredoneConfig.API_path + '/v1/' + endpoint,
+        headers: suredoneHeaders,
+        form: body,
+        strictSSL: false,
+        fullResponse: false
+    };
+
+    return requestretry(options);
+}
 
 var uploadVariantToSureDone = function(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination) {
     
@@ -66,6 +81,7 @@ var uploadVariantToSureDone = function(io, socketId, variantsUploadState, itemGu
     formBody.variantid = variantsUnderColorCode.id;
     formBody.keywords = product.keywords;
     formBody.frontsize = `${repVariant.front.width}_${repVariant.front.height}`;
+    formBody.bigoguid = itemGuid;
     
     if (product.hasOwnProperty('bulletpoint1')) formBody.bulletpoint1 = product.bulletpoint1;
     if (product.hasOwnProperty('bulletpoint2')) formBody.bulletpoint2 = product.bulletpoint2;
@@ -76,7 +92,9 @@ var uploadVariantToSureDone = function(io, socketId, variantsUploadState, itemGu
     variantsUploadState.totalVariantsProcessed++;
     console.log('variants proccessed: ' + variantsUploadState.totalVariantsProcessed + '. current variant: ' + variantsUnderColorCode.id);
     
-    post('editor/items/start', formBody).then((x) => {
+    //post('editor/items/start', formBody).then((x) => {
+    postretry('editor/items/start', formBody)
+    .then((x) => {
         variantsUploadState.totalVariantsUploaded++;
         console.log('variants uploaded: ' + variantsUploadState.totalVariantsUploaded + '. current variant: ' + variantsUnderColorCode.id);
         
@@ -117,6 +135,7 @@ exports.uploadParentToSureDone = function(io, socketId, variantsUploadState, pro
     formBody.variantid = variantsUnderColorCode.id;
     formBody.keywords = product.keywords;
     formBody.frontsize = `${repVariant.front.width}_${repVariant.front.height}`;
+    formBody.bigoguid = itemGuid;
     
     if (product.hasOwnProperty('bulletpoint1')) formBody.bulletpoint1 = product.bulletpoint1;
     if (product.hasOwnProperty('bulletpoint2')) formBody.bulletpoint2 = product.bulletpoint2;
@@ -130,9 +149,10 @@ exports.uploadParentToSureDone = function(io, socketId, variantsUploadState, pro
     } 
     
     console.log('product proccessed: ' + repVariant.product_id);
-
+    
     post('editor/items/start', formBody).then((x) => {
         console.log('product uploaded: ' + repVariant.product_id);
+        
         allVariantsUnderColorCode.forEach(variantsUnderColorCode => {
             uploadVariantToSureDone(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
         });
@@ -149,7 +169,7 @@ exports.uploadParentToSureDone = function(io, socketId, variantsUploadState, pro
             let product = productsByKey[repVariant.product_id];
             
             azureSvc.uploadBlobFromUrl(mockup.mockup_url, mockupDestination)
-            .then((x) => {
+            .then((x) => {                
                 allVariantsUnderColorCode.forEach(variantsUnderColorCode => {
                     uploadVariantToSureDone(io, socketId, variantsUploadState, itemGuid, repVariant, repVariantColor, variantsUnderColorCode, product, mockupDestination);
                 });
