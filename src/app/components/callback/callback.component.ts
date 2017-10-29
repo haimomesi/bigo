@@ -9,5 +9,5 @@ export class CallbackComponent {
   constructor(private authService: AuthService) {
     this.authService.handleAuth();
   }
-
+  
 }

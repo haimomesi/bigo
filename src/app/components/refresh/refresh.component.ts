@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class RefreshComponent implements OnInit {
 
-  constructor(private authService:AuthService) { }
+  constructor(public authService:AuthService) { }
 
   ngOnInit() {
   }

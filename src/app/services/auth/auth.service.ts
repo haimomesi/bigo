@@ -50,8 +50,8 @@ export class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
-        this._getProfile(authResult);
-        this.router.navigate(['/']);
+        this._getProfile(authResult, this.navigateHome);
+        //this.router.navigate(['/']);
       } else if (err) {
         this.router.navigate(['/']);
         console.error(`Error: ${err.error}`);
@@ -59,19 +59,24 @@ export class AuthService {
     });
   }
 
-  private _getProfile(authResult) {
+  private navigateHome(self){
+    self.router.navigate(['/']);
+  }
+
+  private _getProfile(authResult, cb) {
     // Use access token to retrieve user's profile and set session
     this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
-      this._setSession(authResult, profile);
+      this._setSession(authResult, profile, cb);
     });
   }
 
-  private _setSession(authResult, profile) {
+  private _setSession(authResult, profile, cb) {
     // Save session data and update login status subject
     localStorage.setItem('token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('profile', JSON.stringify(profile));
     this.setLoggedIn(true);
+    cb(this);
   }
 
   getProfile(){
@@ -83,8 +88,8 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
-    this.router.navigate(['/']);
     this.setLoggedIn(false);
+    this.router.navigate(['/login']);
   }
 
   get authenticated() {

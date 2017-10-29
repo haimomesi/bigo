@@ -14,7 +14,7 @@ export class DesignsComponent implements OnInit {
   
   modalId: string = 'newDesignModal';
 
-  constructor(private modalService: ModalService, private route: ActivatedRoute, private sharedService: SharedService) {}
+  constructor(private modalService: ModalService, private route: ActivatedRoute, public sharedService: SharedService) {}
 
   ngOnInit() {
     this.sharedService.designs = this.route.snapshot.data['designs'];

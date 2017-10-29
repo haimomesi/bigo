@@ -26,6 +26,7 @@ import { NotificationsComponent } from './components/notifications/notifications
 import { ClickStopPropagationDirective } from './directives/click-stop-propagation.directive';
 import { SavingDotsComponent } from './components/saving-dots/saving-dots.component';
 import { RefreshComponent } from './components/refresh/refresh.component';
+import { LoginComponent } from './partials/login/login.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { RefreshComponent } from './components/refresh/refresh.component';
     NotificationsComponent,
     ClickStopPropagationDirective,
     SavingDotsComponent,
-    RefreshComponent
+    RefreshComponent,
+    LoginComponent
   ],
   imports: [
     HttpModule,

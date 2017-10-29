@@ -1,4 +1,9 @@
-.app-refresh-button{
-    right: calc(50% - 100px);
-    top: calc(50% - 18px);
+.app-refresh
+{
+    z-index: 10000;
+    
+    &-button{
+        right: calc(50% - 100px);
+        top: calc(50% - 18px);
+    }
 }

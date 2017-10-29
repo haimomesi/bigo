@@ -4,8 +4,18 @@ import { AuthGuardService } from './services/auth/auth-guard.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import { DesignsComponent } from './partials/designs/designs.component';
 import { DesignsResolver } from './resolves/designs/designs.resolve';
+import { LoginComponent } from './partials/login/login.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    redirectTo: '/designs',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'designs',
     component: DesignsComponent,
