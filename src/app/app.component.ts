@@ -4,22 +4,37 @@ import { Router, ActivatedRoute, NavigationStart, NavigationCancel, NavigationEr
 import { SharedService } from './services/shared/shared.service';
 import { NotificationService } from './services/notification/notification.service';
 import { AppNotification } from './shared/classes/notification';
+import { Renderer2Service } from './services/utils/renderer2.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [Renderer2Service]
 })
 export class AppComponent {
   
   mainLoading: boolean = false;
+  renderer;
 
   @ViewChild('profileMenu') profileMenu;
   
-  constructor(public notificationService: NotificationService, public authService: AuthService, public router: Router, public route: ActivatedRoute, public sharedService: SharedService) {
+  constructor(public notificationService: NotificationService, public authService: AuthService, public router: Router, public route: ActivatedRoute, public sharedService: SharedService, rendererService: Renderer2Service) {
+
+    var self = this;
+
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
-    })
+    });
+
+    this.renderer = rendererService.getRenderer();
+    this.renderer.listen('document', 'click', function(event: MouseEvent): void {
+      self.handleClick(event, self);
+    });
+  }
+
+  handleClick(event, self){
+    self.sharedService.refresh = self.authService.loggedIn && !self.authService.authenticated;
   }
   
   toggleProfile(){

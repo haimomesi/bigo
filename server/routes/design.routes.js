@@ -74,26 +74,11 @@ module.exports = function(app, wss) {
     
     /// DESIGN ROUTES ///
     
-    /* GET request for creating a Design. NOTE This must come before routes that display Design (uses id) */
-    router.get('/design/create', jwtCheck, design_controller.design_create_get);
-    
     /* POST request for creating Design. */
     router.post('/design/create', jwtCheck, design_controller.design_create_post);
     
     /* GET request to delete Design. */
-    router.get('/design/:id/delete', jwtCheck, design_controller.design_delete_get);
-    
-    // POST request to delete Design
-    router.post('/design/:id/delete', jwtCheck, design_controller.design_delete_post);
-    
-    /* GET request to update Design. */
-    router.get('/design/:id/update', jwtCheck, design_controller.design_update_get);
-    
-    // POST request to update Design
-    router.post('/design/:id/update', jwtCheck, design_controller.design_update_post);
-    
-    /* GET request for one Design. */
-    router.get('/design/:id', jwtCheck, design_controller.design_detail);
+    router.get('/design/:id/:socketId/delete', design_controller.design_delete_get);
     
     /* GET request for list of all Design items. */
     router.get('/designs', jwtCheck, design_controller.design_list);

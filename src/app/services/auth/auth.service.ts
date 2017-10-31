@@ -94,7 +94,6 @@ export class AuthService {
 
   get authenticated() {
     // Check if there's an unexpired access token
-    console.log('checking tokenNotExpired');
     return tokenNotExpired('token');
   }
 

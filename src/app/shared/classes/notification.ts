@@ -7,4 +7,5 @@ export class AppNotification {
     message: string;
     title: string;
     img: string;
+    action: string;
 }

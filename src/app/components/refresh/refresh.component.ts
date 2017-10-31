@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
+import { SharedService } from '../../services/shared/shared.service';
 
 @Component({
   selector: 'app-refresh',
@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class RefreshComponent implements OnInit {
   
-  constructor(public authService:AuthService) { }
+  constructor(public sharedService:SharedService) { }
   
   ngOnInit() {
   }
@@ -18,6 +18,6 @@ export class RefreshComponent implements OnInit {
   }
   
   shouldRefresh(){
-      return this.authService.loggedIn && !this.authService.authenticated;
+    return this.sharedService.refresh;
   }
 }

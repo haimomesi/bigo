@@ -18,14 +18,15 @@
           <div class="notification" *ngFor="let notification of notifications">
             <div class="notification-status" [ngClass]="{ 'notification-status--error': notification.status == 'error', 'notification-status--success': notification.status == 'success' }"></div>
             <div class="notification-header">
-              <span *ngIf="notification.status == 'pending'">Design {{notification.guid}} is pending</span>
+              <span *ngIf="notification.status == 'pending'">Design {{notification.guid}} {{notification.action}} is pending</span>
               <span *ngIf="notification.status == 'uploading'">Design {{notification.guid}} is uploading</span>
-              <span *ngIf="notification.status == 'success'">Design {{notification.guid}} was uploaded</span>
-              <span *ngIf="notification.status == 'error'">Design {{notification.guid}} upload failed</span>
+              <span *ngIf="notification.status == 'success' && notification.action == 'add'">Design {{notification.guid}} was uploaded</span>
+              <span *ngIf="notification.status == 'success' && notification.action == 'delete'">Design {{notification.guid}} was deleted</span>
+              <span *ngIf="notification.status == 'error'">Design {{notification.guid}} {{notification.action}} failed</span>
             </div>
             <div class="notification-content">
-              <span *ngIf="notification.status == 'pending' || notification.status == 'error'" class="notification-body">{{notification.message}}</span>
-              <span *ngIf="notification.status != 'pending' && notification.status != 'error'" class="notification-body">Uploaded {{notification.totalVariantsUploaded}} of {{notification.totalVariants}} variants</span>
+              <span *ngIf="notification.status == 'pending'" class="notification-body">{{notification.message}}</span>
+              <span *ngIf="notification.status != 'pending' && notification.status != 'error' && notification.action == 'add'" class="notification-body">Uploaded {{notification.totalVariantsUploaded}} of {{notification.totalVariants}} variants</span>
               <app-saving-dots *ngIf="notification.status != 'success' && notification.status != 'error'"></app-saving-dots>
               <div *ngIf="notification.status == 'uploading'" class="notification-progress">
                 <div [style.width.%]="notification.progress" class="notification-progress-body"></div>

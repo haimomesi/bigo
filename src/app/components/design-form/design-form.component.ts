@@ -38,7 +38,8 @@ export class DesignFormComponent {
         totalVariantsUploaded: 0,
         totalVariants: 0,
         title: self.design.title,
-        img: self.pictureParts.last.picture
+        img: self.pictureParts.last.picture,
+        action: 'add'
       });
       this.designService.create(this.design)
       .then(function(response){

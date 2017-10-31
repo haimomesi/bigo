@@ -6,24 +6,24 @@ import { AuthHttp } from 'angular2-jwt';
 
 @Injectable()
 export class DesignService {
-
+  
   private backendUrl = 'api/';
-
+  
   constructor(private http: Http, private authHttp: AuthHttp) {}
-
+  
   // Implement a method to get the public deals
   getDesigns() {
     return this.authHttp
-      .get(this.backendUrl + 'designs')
-      .toPromise()
-      .then(response=>response.json() as Array<Design>[])
-      .catch(this.handleError);
+    .get(this.backendUrl + 'designs')
+    .toPromise()
+    .then(response=>response.json() as Array<Design>[])
+    .catch(this.handleError);
   }
-
+  
   create(design: Design) {
-
+    
     const formData: any = new FormData();
-
+    
     formData.append("guid", design.guid);
     formData.append("title", design.title);
     formData.append("keywords", design.keywords);
@@ -34,11 +34,15 @@ export class DesignService {
     
     return this.authHttp.post(this.backendUrl + 'design/create', formData).toPromise();
   }
-
+  
+  delete(designGuid, socketId){        
+    return this.authHttp.get(`${this.backendUrl}design/${designGuid}/${socketId}/delete`).toPromise();
+  }
+  
   // Implement a method to handle errors if any
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
-
+  
 }

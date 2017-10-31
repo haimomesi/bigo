@@ -1,0 +1,15 @@
+
+<div [ngClass]="{'closed': !isOpen}">
+  <div class="confirmation-modal-overlay" (click)="close(true)"></div>
+  <div class="confirmation-modal">
+    <a (click)="close()" class="confirmation-modal-close">Close</a>
+    <div class="confirmation-modal-icon"></div>
+    <h1 class="confirmation-modal-title">Delete {{entity}}</h1>
+    <div class="confirmation-modal-content">
+      <div class="actions">
+        <a (click)="confirm()" class="confirm">Yes, Delete {{entity}}</a>
+        <a (click)="close()" class="cancel">Cancel, Keep {{entity}}</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -25,10 +25,16 @@
                     <img class="size-h--200 size-w--200" [src]="design.image" onError="this.src='assets/images/blank.png';"/>
                 </div>
                 <div class="design-meta size-w--full pa--10 relative">
+                    <span class="design-meta-delete absolute pointer" (click)="openConfirmationModal(design.sku)">
+                        <svg style="width: 20px;height: 20px;" viewBox="0 0 24 24">
+                            <path fill="#757b8b" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
+                        </svg>
+                    </span>
                     <span class="design-meta-title">{{design.title}}</span>
                     <span class="design-meta-subtitle">{{design.sku}}</span>
                 </div>
             </div>
         </div>
         <app-modal [modalTitle]="'create new design'" [blocking]='false' [modalId]='modalId'></app-modal>
+        <app-confirmation-modal [entity]="'Design'" (notify)="deleteDesign($event)" [modalId]='confirmationModalId'></app-confirmation-modal>
     </div>

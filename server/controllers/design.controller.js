@@ -49,16 +49,6 @@ function DesignController(wss){
         });
     };
     
-    // Display detail page for a specific design
-    ctrl.design_detail = function(req, res) {
-        res.send('NOT IMPLEMENTED: Design detail: ' + req.params.id);
-    };
-    
-    // Display design create form on GET
-    ctrl.design_create_get = function(req, res) {
-        res.send('NOT IMPLEMENTED: Design create GET');
-    };
-    
     // Handle design create on POST
     ctrl.design_create_post = function(req, res) {
         
@@ -77,7 +67,16 @@ function DesignController(wss){
         printfileVariants = {},
         mockupGeneratorSubscriptions = [],
         possibleSizes = {},
-        possibleAspectRatios = {};
+        possibleAspectRatios = {},
+        allMockups = [],
+        bulkArray = [];
+
+        var notificationObj = {
+            totalVariantsProcessed: 0,
+            totalVariantsUploaded: 0,
+            designRepresentativeSet: false,
+            action: 'add'
+        };
         
         form.parse(req, function(err, fields, files) {
             
@@ -86,7 +85,7 @@ function DesignController(wss){
             let frontDestinations = {};
             
             //notify user thru socket
-            utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Fetching products from Printful');
+            utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Fetching products from Printful');
             
             printfulSvc.get('products')
             .then(function(productsResponse){
@@ -106,7 +105,7 @@ function DesignController(wss){
             })
             .then(function(productsPrintFilesResults){
                 
-                utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Collecting variants from products');
+                utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Collecting variants from products');
                 
                 productsPrintFilesResults.forEach(function(productDetails) {
                     if (productDetails) {
@@ -144,7 +143,7 @@ function DesignController(wss){
                             
                             //get front and back label
                             let p_front = p_placements.front;
-                            let p_label_outside = p_placements.label_outside;
+                            //let p_label_outside = p_placements.label_outside;
                             
                             //get front sizes
                             let p_front_size = printfileIds[p_front];
@@ -154,11 +153,11 @@ function DesignController(wss){
                             possibleAspectRatios[`${p_front_size.width}_${p_front_size.height}`] = variant.front;
                             
                             //get label_outside sizes
-                            if (p_label_outside) {
-                                let p_label_outside_size = printfileIds[p_label_outside];
-                                variant.label_outside = { width: p_label_outside_size.width, height: p_label_outside_size.height };
-                                variant.price = parseFloat(variant.price) + additional_price;
-                            }
+                            // if (p_label_outside) {
+                            //     let p_label_outside_size = printfileIds[p_label_outside];
+                            //     variant.label_outside = { width: p_label_outside_size.width, height: p_label_outside_size.height };
+                            //     variant.price = parseFloat(variant.price) + additional_price;
+                            // }
                             if (!products.hasOwnProperty(variant.product_id))
                             products[variant.product_id] = [];
                             
@@ -189,7 +188,7 @@ function DesignController(wss){
             })
             .then(function(resizedImageStreams){
                 
-                utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Uploading designs to Blob storage');
+                utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Uploading designs to Blob storage');
                 
                 let azureTemps = [];
                 
@@ -257,16 +256,10 @@ function DesignController(wss){
                     generateMockups.push(printfulSvc.post(generateMockupResource, generateMockupBody));
                 }
                 
-                utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Uploading mockups to Printful');
+                utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Uploading mockups to Printful');
                 return Q.all(generateMockups);
             })
             .then(function(generateMockupsResults){  
-                
-                var variantsUploadState = {
-                    totalVariantsProcessed: 0,
-                    totalVariantsUploaded: 0,
-                    designRepresentativeSet: false
-                };
                 
                 let mockupGeneratorSubscriptions = [];
                 
@@ -294,47 +287,44 @@ function DesignController(wss){
                 Rx.Observable.forkJoin(mockupGeneratorSubscriptions)
                 .subscribe(t => {
                     
-                    utils.notifySocket(wss, socketId, itemGuid, 'pending', null, 'Pushing products to SureDone');
-                    
-                    //first get total variants count
-                    t.forEach(mockups => {
-                        
-                        mockups.forEach(function(mockup) {
-                            let firstMockup = mockup;
-                            let repVariantId = firstMockup.variant_ids[0];
-                            let repVariant = productsCalculatedVariants[repVariantId];
-                            let repVariantColor = repVariant.color_code.substring(1);
-                            let allVariantsUnderColorCode = colors[repVariant.product_id][repVariantColor];
-                            variantsCount += allVariantsUnderColorCode.length;
-                        });
-                    });
-                    
-                    variantsUploadState.totalVariants = variantsCount;
-                    
+                    utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Pushing mockups to Storage');
+
+                    let uploadBlobFromUrls = [];
+
                     //then create products in suredone
                     t.forEach(mockups => {
-                        
-                        //handle first mock as parent
-                        let firstMockup = mockups[0];
-                        let repVariantId = firstMockup.variant_ids[0];
-                        let repVariant = productsCalculatedVariants[repVariantId];
-                        let repVariantColor = repVariant.color_code.substring(1);
-                        let allVariantsUnderColorCode = colors[repVariant.product_id][repVariantColor];
-                        
-                        let mockupDestination = `${itemGuid}/${repVariant.product_id}/${repVariantColor}.${firstMockup.mockup_url.slice((firstMockup.mockup_url.lastIndexOf(".") - 1 >>> 0) + 2)}`;
-                        let product = productsByKey[repVariant.product_id];
-                        
-                        azureSvc.uploadBlobFromUrl(firstMockup.mockup_url, mockupDestination)
-                        .then(function(x){
-                            suredoneSvc.uploadParentToSureDone(wss, socketId, variantsUploadState, productsCalculatedVariants, colors, productsByKey, itemGuid, repVariant, repVariantColor, allVariantsUnderColorCode[0], product, mockupDestination, allVariantsUnderColorCode, mockups);
+
+                        mockups.forEach(mockup => {
+
+                            mockup.repVariantId = mockup.variant_ids[0];
+                            mockup.repVariant = productsCalculatedVariants[mockup.repVariantId];
+                            mockup.repVariantColor = mockup.repVariant.color_code.substring(1);
+                            mockup.allVariantsUnderColorCode = colors[mockup.repVariant.product_id][mockup.repVariantColor];
+                            variantsCount += mockup.allVariantsUnderColorCode.length;
+                            mockup.mockupDestination = `${itemGuid}/${mockup.repVariant.product_id}/${mockup.repVariantColor}.${mockup.mockup_url.slice((mockup.mockup_url.lastIndexOf(".") - 1 >>> 0) + 2)}`;
+                            mockup.product = productsByKey[mockup.repVariant.product_id];
+
+                            uploadBlobFromUrls.push(azureSvc.uploadBlobFromUrl(mockup.mockup_url, mockup.mockupDestination));
                         });
+
+                        allMockups.push(mockups);
+
                     });
+
+                    notificationObj.totalVariants = variantsCount;
                     
+                    Q.all(uploadBlobFromUrls).then(function(parentsUploadedUrls){
+                        //console.log('parentsUploadedUrls');
+                        suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid);
+                    })
+                    .catch(function(err) {
+                        utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);
+                        console.error(err);
+                    });
                 });
-                
             })
             .catch(function(err) {
-                utils.notifySocket(wss, socketId, itemGuid, 'error', null, err);
+                utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);
                 console.error(err);
             });
         });
@@ -342,22 +332,11 @@ function DesignController(wss){
     
     // Display design delete form on GET
     ctrl.design_delete_get = function(req, res) {
-        res.send('NOT IMPLEMENTED: Design delete GET');
-    };
-    
-    // Handle design delete on POST
-    ctrl.design_delete_post = function(req, res) {
-        res.send('NOT IMPLEMENTED: Design delete POST');
-    };
-    
-    // Display design update form on GET
-    ctrl.design_update_get = function(req, res) {
-        res.send('NOT IMPLEMENTED: Design update GET');
-    };
-    
-    // Handle design update on POST
-    ctrl.design_update_post = function(req, res) {
-        res.send('NOT IMPLEMENTED: Design update POST');
+        var guid = req.params.id;
+        var socketId = req.params.socketId;
+
+        suredoneSvc.deleteProduct(wss, socketId, guid);
+        res.send('deleting...');
     };
     
     return ctrl;

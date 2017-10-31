@@ -249,14 +249,15 @@ exports.getSizeMap = function(printfulSize) {
     return amznSize;
 }
 
-exports.notifySocket = function(wss, socketId, guid, status, variantsUploadState, message){
+exports.notifySocket = function(wss, socketId, guid, status, notificationObj, message){
     
     wss.clients.forEach(function each(client) {
         if (client.socketId === socketId && client.readyState === ws.OPEN) {
             client.send(JSON.stringify({
                 guid: guid,
-                totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,
-                totalVariantsUploaded: variantsUploadState ? variantsUploadState.totalVariantsUploaded : 0,
+                totalVariants: notificationObj && notificationObj.hasOwnProperty('totalVariants') ? notificationObj.totalVariants : 0,
+                totalVariantsUploaded: notificationObj && notificationObj.hasOwnProperty('totalVariantsUploaded') ? notificationObj.totalVariantsUploaded : 0,
+                action: notificationObj && notificationObj.hasOwnProperty('action') ? notificationObj.action : 'add',
                 status: status,
                 message: message
             }));
@@ -267,8 +268,8 @@ exports.notifySocket = function(wss, socketId, guid, status, variantsUploadState
     
     //     var notification = {
     //         guid: guid,
-    //         totalVariants: variantsUploadState ? variantsUploadState.totalVariants : 0,
-    //         totalVariantsUploaded: variantsUploadState ? variantsUploadState.totalVariantsUploaded : 0,
+    //         totalVariants: notificationObj ? notificationObj.totalVariants : 0,
+    //         totalVariantsUploaded: notificationObj ? notificationObj.totalVariantsUploaded : 0,
     //         status: status,
     //         message: message
     //     };

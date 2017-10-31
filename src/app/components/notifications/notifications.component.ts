@@ -11,60 +11,76 @@ import { SharedService } from '../../services/shared/shared.service';
   providers: [Renderer2Service]
 })
 export class NotificationsComponent implements OnInit {
-
+  
   renderer;
   isOpen = false;
   notifications = [];
-
+  
   constructor(private notificationsService: NotificationService, rendererService: Renderer2Service, private sharedService: SharedService) { 
     this.renderer = rendererService.getRenderer();
   }
-
+  
   ngOnInit() {
     
     this.notificationsService.register(this);
-
-    this.notificationsService.getNotifications().subscribe((notification:AppNotification) => {
     
+    this.notificationsService.getNotifications().subscribe((notification:AppNotification) => {
+      
       let existingNotification:AppNotification = this.notifications.filter((n: AppNotification) => {
-        return n.guid == notification.guid;
-      })[0];
-
-      let progress = notification.totalVariantsUploaded / notification.totalVariants * 100;
+        return n.guid == notification.guid && n.action == notification.action;
+      })[0];  
       
       if(existingNotification){
+        
         existingNotification.status = notification.status;
-        existingNotification.totalVariantsUploaded = notification.totalVariantsUploaded;
-        existingNotification.totalVariants = notification.totalVariants;
-        existingNotification.progress = progress;
+        
+        if(existingNotification.action == 'add'){
+          existingNotification.totalVariantsUploaded = notification.totalVariantsUploaded;
+          existingNotification.totalVariants = notification.totalVariants;
+          existingNotification.progress = notification.totalVariantsUploaded / notification.totalVariants * 100;
+        }
+        
         existingNotification.message = notification.message;
-
+        
         if(notification.status == 'success')
         {
-          this.sharedService.designs.push({
-            image: existingNotification.img,
-            title: existingNotification.title,
-            sku: existingNotification.guid
-          });
+          if(notification.action == 'add'){
+            this.sharedService.designs.push({
+              image: existingNotification.img,
+              title: existingNotification.title,
+              sku: existingNotification.guid
+            });
+          }
+          else if(notification.action == 'delete'){
+            for (var index = 0; index < this.sharedService.designs.length; index++) {
+              if(this.sharedService.designs[index].sku == notification.guid)
+              this.sharedService.designs.splice(index, 1);
+            }
+          }
+        }
+        else if(notification.status == 'error'){
+          console.log(notification.message);
         }
       }
       else{
-        notification.progress = progress;
+        if(notification.action == 'add')
+        notification.progress = notification.totalVariantsUploaded / notification.totalVariants * 100;
+        
         this.notifications.push(notification);
       }
     },
     error => this.handleError);
   }
-
+  
   handleError(error): void {
     this.notifications.forEach(notification => {
       notification.status = notification.status != 'success' ? 'error': notification.status;
       notification.message = notification.status == 'error' ? error : notification.message;
     });
   }
-
+  
   close(): void {
     this.notificationsService.close();
   }
-
+  
 }

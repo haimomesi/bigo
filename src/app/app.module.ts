@@ -27,6 +27,8 @@ import { ClickStopPropagationDirective } from './directives/click-stop-propagati
 import { SavingDotsComponent } from './components/saving-dots/saving-dots.component';
 import { RefreshComponent } from './components/refresh/refresh.component';
 import { LoginComponent } from './partials/login/login.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalService } from './services/confirmation-modal/confirmation-modal.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { LoginComponent } from './partials/login/login.component';
     ClickStopPropagationDirective,
     SavingDotsComponent,
     RefreshComponent,
-    LoginComponent
+    LoginComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     HttpModule,
@@ -59,7 +62,8 @@ import { LoginComponent } from './partials/login/login.component';
     SharedService, 
     ModalService, 
     DesignService,
-    NotificationService
+    NotificationService,
+    ConfirmationModalService
   ],
   bootstrap: [AppComponent]
 })
