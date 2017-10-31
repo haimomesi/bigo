@@ -1,6 +1,6 @@
 
 <div [ngClass]="{'closed': !isOpen}">
-  <div class="confirmation-modal-overlay" (click)="close(true)"></div>
+  <div class="confirmation-modal-overlay" (click)="close()"></div>
   <div class="confirmation-modal">
     <a (click)="close()" class="confirmation-modal-close">Close</a>
     <div class="confirmation-modal-icon"></div>
