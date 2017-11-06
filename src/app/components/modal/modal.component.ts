@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ModalService } from '../../services/modal/modal.service';
-import 'gsap';
-import { TweenLite } from 'gsap';
 import { Renderer2Service } from '../../services/utils/renderer2.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { AppNotification } from '../../shared/classes/notification';

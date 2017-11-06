@@ -30,6 +30,8 @@ export class NotificationsComponent implements OnInit {
         return n.guid == notification.guid && n.action == notification.action;
       })[0];  
       
+      console.log("existingNotification: " + existingNotification);
+
       if(existingNotification){
         
         existingNotification.status = notification.status;

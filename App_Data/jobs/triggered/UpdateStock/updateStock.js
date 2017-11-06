@@ -47,7 +47,7 @@ let getFromPrintful = function(endpoint){
     
     //send request
     return rp(options);
-};
+}
 
 let bulk_get = function(endpoint) {
     
@@ -183,7 +183,7 @@ getFromPrintful('products')
                     
                     bulk_post('editor/items', bulkBody)
                     .then(function(response){
-                        console.log(`${response.result} ${reponse.message}`);
+                        console.log(`${response.result} ${response.message}`);
                     })
                     .catch(function(err){
                         console.error(err);

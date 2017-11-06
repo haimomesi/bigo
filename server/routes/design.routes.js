@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
+const azureSvc = require('../services/azureBlob.service');
 
 // We are going to implement a JWT middleware that will ensure the validity of our token. We'll require each protected route to have a valid access_token sent in the Authorization header
 const jwtCheck = jwt({
@@ -23,53 +24,8 @@ module.exports = function(app, wss) {
     const design_controller = require('../controllers/design.controller')(wss);
     
     router.get('/', (req, res) => {
-
-        //console.log(io);
-
-        let formBody = {};
-        let itemGuid = '123';
-        let repVariant = {product_id: 5};
-        let repVariantColor = 'blue';
-        let variantsUnderColorCode = {
-            id: 37,
-            price: '50',
-            size:'XL',
-            size: 'Blue'
-        };
-        let product = {
-            title: 'title',
-            model: 'model',
-            description: 'description',
-            department: 'department',
-            amznitemtype: 'amznitemtype',
-            keywords: 'keywords'
-        };
-        
-        formBody['identifier'] = 'guid';
-        formBody['guid'] = `${itemGuid}-${repVariant.product_id}-${repVariantColor}-${variantsUnderColorCode.id}`;
-        formBody['sku'] = `${itemGuid}-${repVariant.product_id}`;
-        formBody['partnumber'] = formBody['guid'];
-        formBody['cost'] = variantsUnderColorCode.price;
-        formBody['stock'] = '1000';
-        formBody['price'] = Math.ceil(parseFloat(variantsUnderColorCode.price) * 1.3).toString();
-        formBody['title'] = `${product.title} ${product.model}`;
-        formBody['media1'] = `destination`;
-        formBody['brand'] = 'DollarScent';
-        formBody['description'] = product.description;
-        formBody['size'] = variantsUnderColorCode.size;
-        formBody['color'] = variantsUnderColorCode.color;
-        formBody['colorCode'] = repVariantColor;
-        formBody['colormap'] = variantsUnderColorCode.color;
-        formBody['department'] = product.department;
-        formBody['amznitemtype'] = product.amznitemtype;
-        formBody['amzncategory'] = '5';
-        formBody['registeredparameter'] = 'PrivateLabel';
-        formBody['variationtheme'] = 'sizecolor';
-        formBody['condition'] = 'New';
-        formBody['variantid'] = variantsUnderColorCode.id;
-        formBody['keywords'] = product.keywords;
-        
-        res.send(formBody);
+        //azureSvc.listBlobsUnderFolder(req.params.folderGuid);
+        res.send('ok');
     });
     
     /// DESIGN ROUTES ///
