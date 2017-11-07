@@ -21,6 +21,7 @@ export class DesignFormComponent {
   defaultFrontPicture = 'assets/images/front.png';
   defaultOutsideLabelPicture = 'assets/images/outside-label.png';
   design:Design = new Design();
+  actions = ['add','start'];
   
   uploaderOptions: NgUploaderOptions = {
     url: '',
@@ -55,7 +56,7 @@ export class DesignFormComponent {
     this.pictureParts.forEach(picturePart => {
       picturePart.removePicture();
     });
-  
+    
   }
   
   onNotify(event, cmpName) {

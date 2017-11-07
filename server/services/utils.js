@@ -1,77 +1,77 @@
-const sharp = require('sharp');
-const Duplex = require('stream').Duplex; 
-const Q = require('q');
-const fs = require('fs');
+//const sharp = require('sharp');
+//const Duplex = require('stream').Duplex; 
+//const Q = require('q');
+//const fs = require('fs');
 const ws = require('ws');
 
-function bufferToStream(buffer) {  
-    let stream = new Duplex();
-    stream.push(buffer);
-    stream.push(null);
-    return stream;
-}
+// function bufferToStream(buffer) {  
+//     let stream = new Duplex();
+//     stream.push(buffer);
+//     stream.push(null);
+//     return stream;
+// }
 
-exports.cropImage = function(pathToFile, size){
+// exports.cropImage = function(pathToFile, size){
     
-    var deferred = Q.defer();
+//     var deferred = Q.defer();
     
-    sharp(pathToFile)
-    .resize(size, size)
-    .crop(sharp.strategy.entropy)
-    .toBuffer()
-    .then( buf => {
-        deferred.resolve({
-            stream: bufferToStream(buf),
-            size: `${size}_${size}`
-        });
-    })
-    .catch( err => {
-        deferred.reject(new Error(err));
-    });
+//     sharp(pathToFile)
+//     .resize(size, size)
+//     .crop(sharp.strategy.entropy)
+//     .toBuffer()
+//     .then( buf => {
+//         deferred.resolve({
+//             stream: bufferToStream(buf),
+//             size: `${size}_${size}`
+//         });
+//     })
+//     .catch( err => {
+//         deferred.reject(new Error(err));
+//     });
     
-    return deferred.promise;
-}
+//     return deferred.promise;
+// }
 
-exports.resizeImageMax = function(pathToFile, width, height){
+// exports.resizeImageMax = function(pathToFile, width, height){
     
-    var deferred = Q.defer();
+//     var deferred = Q.defer();
     
-    sharp(pathToFile)
-    .resize(width, height)
-    .max()
-    .toBuffer()
-    .then( buf => {
-        deferred.resolve({
-            stream: bufferToStream(buf),
-            size: `${width}_${height}`
-        });
-    })
-    .catch( err => {
-        deferred.reject(new Error(err));
-    });
+//     sharp(pathToFile)
+//     .resize(width, height)
+//     .max()
+//     .toBuffer()
+//     .then( buf => {
+//         deferred.resolve({
+//             stream: bufferToStream(buf),
+//             size: `${width}_${height}`
+//         });
+//     })
+//     .catch( err => {
+//         deferred.reject(new Error(err));
+//     });
     
-    return deferred.promise;
-}
+//     return deferred.promise;
+// }
 
-exports.resizeImage = function(pathToFile, width, height){
+// exports.resizeImage = function(pathToFile, width, height){
     
-    var deferred = Q.defer();
+//     var deferred = Q.defer();
     
-    sharp(pathToFile)
-    .resize(width, height)
-    .toBuffer()
-    .then( buf => {
-        deferred.resolve({
-            stream: bufferToStream(buf),
-            size: `${width}_${height}`
-        });
-    })
-    .catch( err => {
-        deferred.reject(new Error(err));
-    });
+//     sharp(pathToFile)
+//     .resize(width, height)
+//     .toBuffer()
+//     .then( buf => {
+//         deferred.resolve({
+//             stream: bufferToStream(buf),
+//             size: `${width}_${height}`
+//         });
+//     })
+//     .catch( err => {
+//         deferred.reject(new Error(err));
+//     });
     
-    return deferred.promise;
-}
+//     return deferred.promise;
+// }
 
 exports.containsWord = function(product){
     var blackListWords = ['Toddler', 'Infant', 'Baby', 'Kid', 'Youth'];

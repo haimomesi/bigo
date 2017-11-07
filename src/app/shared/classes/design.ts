@@ -7,6 +7,7 @@ export class Design {
     public frontPrint_1500_1800;
     public frontPrint_1500_1500;
     public socketId:string;
+    public action: string;
     //public outsideLabelPrint;
     
     constructor() {

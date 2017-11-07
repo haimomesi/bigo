@@ -41,12 +41,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 const port = process.env.PORT || '3000';
 app.set('port', port);
 
-// if(port == '3000')
-// {
-//   require('request').debug = true;
-//   require('request-promise').debug = true;
-// }
-
 /**
 * Create HTTP server.
 */
@@ -60,18 +54,6 @@ wss.on('connection', function connection(ws, req) {
 });
 
 require('./server/routes/design.routes')(app, wss);
-
-//const io = require('socket.io')(server);
-
-// io.on('connection', (socket) => {
-//   console.log('user connected');
-
-//   socket.on('disconnect', function(){
-//     console.log('user disconnected');
-//   });
-// });
-
-//require('./server/routes/design.routes')(app, io);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {

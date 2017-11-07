@@ -88,27 +88,27 @@ let bulk_get = function(endpoint) {
     return requestretry(options);
 }
 
-let addProductToBulkArray = function(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups){
+let addProductToBulkArray = function(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, selectedAction){
     mockups.forEach((mockup, index) => {
         
         if (index == 0) {
-            populateVariantArray(bulkArray, notificationObj, true, itemGuid, mockup, mockup.allVariantsUnderColorCode[0], '0');
+            populateVariantArray(bulkArray, notificationObj, true, itemGuid, mockup, mockup.allVariantsUnderColorCode[0], '0', selectedAction);
         }
         
         mockup.allVariantsUnderColorCode.forEach(variantUnderColorCode => {
             notificationObj.totalVariantsProcessed++;
-            populateVariantArray(bulkArray, notificationObj, false, itemGuid, mockup, variantUnderColorCode, '1000');
+            populateVariantArray(bulkArray, notificationObj, false, itemGuid, mockup, variantUnderColorCode, '1000', selectedAction);
             notificationObj.totalVariantsUploaded++;
             utils.notifySocket(wss, socketId, itemGuid, 'uploading', notificationObj);
         });
     });
 };
 
-let populateVariantArray = function(bulkArray, notificationObj, productRep, itemGuid, variant, variantUnderColorCode, stock){
+let populateVariantArray = function(bulkArray, notificationObj, productRep, itemGuid, variant, variantUnderColorCode, stock, selectedAction){
     
     try {
         
-        let productArray = ["start"];
+        let productArray = [selectedAction];
         
         productRep ? productArray.push(`${itemGuid}-${variant.repVariant.product_id}`) : productArray.push(`${itemGuid}-${variant.repVariant.product_id}-${variant.repVariantColor}-${variantUnderColorCode.id}`); //guid
         productArray.push(`${itemGuid}-${variant.repVariant.product_id}`); //sku
@@ -155,10 +155,10 @@ let populateVariantArray = function(bulkArray, notificationObj, productRep, item
     }
 };
 
-let populateHeader = function(bulkArray){
+let populateHeader = function(bulkArray, selectedAction){
     if(bulkArray.length == 0)
     bulkArray.push([
-        "action=start",
+        "action=" + selectedAction,
         "guid",
         "sku",
         "partnumber",
@@ -192,14 +192,14 @@ let populateHeader = function(bulkArray){
     );
 }
 
-exports.addProducts = function(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid){
+exports.addProducts = function(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction){
     
     utils.notifySocket(wss, socketId, itemGuid, 'pending',notificationObj, 'Proccessing all variants');
     
-    populateHeader(bulkArray);
+    populateHeader(bulkArray, selectedAction);
     
     allMockups.forEach(mockups => {
-        addProductToBulkArray(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups);    
+        addProductToBulkArray(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, selectedAction);    
     });
     
     let bulkBody = 'requests=';

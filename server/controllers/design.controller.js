@@ -52,7 +52,6 @@ function DesignController(wss){
     // Handle design create on POST
     ctrl.design_create_post = function(req, res) {
         
-        //res.send('NOT IMPLEMENTED: Design create POST');
         //notify user thru socket
         res.send();
         
@@ -83,6 +82,7 @@ function DesignController(wss){
             let socketId = fields.socketId[0];
             let itemGuid = fields.guid[0];
             let frontDestinations = {};
+            let selectedAction = fields.action[0];
             
             //notify user thru socket
             utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Fetching products from Printful');
@@ -167,24 +167,6 @@ function DesignController(wss){
                     }
                 });
                 
-                //let resizeImagesPromises = [];
-                
-                //resizeImagesPromises.push(utils.resizeImageMax(files['frontPrint_1800_2400'][0].path, 1000, 1333));
-                //resizeImagesPromises.push(utils.resizeImageMax(files['frontPrint_1500_1800'][0].path, 1000, 1333));
-                //resizeImagesPromises.push(utils.resizeImageMax(files['frontPrint_1500_1500'][0].path, 1000, 1333));
-                
-                // for (let possibleAspectRatio in possibleAspectRatios) {
-                //     if( possibleAspectRatios.hasOwnProperty(possibleAspectRatio) ) {
-                //         let aspectRatio = possibleAspectRatios[possibleAspectRatio];
-                //         if(aspectRatio.width === aspectRatio.height)
-                //         resizeImagesPromises.push(utils.cropImage(files['frontPrint'][0].path, aspectRatio.width));
-                //         else
-                //         resizeImagesPromises.push(utils.resizeImageMax(files['frontPrint'][0].path, aspectRatio.width, aspectRatio.height));
-                //     } 
-                // }    
-                
-                //return Q.all(resizeImagesPromises);
-                
             })
             .then(function(resizedImageStreams){
                 
@@ -203,12 +185,6 @@ function DesignController(wss){
                 let frontDestination_1500_1500 = `${itemGuid}/front_1500_1500.${files['frontPrint_1500_1500'][0].originalFilename.slice((files['frontPrint_1500_1500'][0].originalFilename.lastIndexOf(".") - 1 >>> 0) + 2)}`;
                 azureTemps.push(azureSvc.uploadBlobFromLocalFile(files['frontPrint_1500_1500'][0].path, frontDestination_1500_1500));
                 frontDestinations['1500_1500'] = frontDestination_1500_1500;
-                
-                // resizedImageStreams.forEach((resizedImage) => {
-                //     let frontDestination = `${itemGuid}/front_${resizedImage.size}.${files['frontPrint'][0].originalFilename.slice((files['frontPrint'][0].originalFilename.lastIndexOf(".") - 1 >>> 0) + 2)}`;
-                //     azureTemps.push(azureSvc.uploadBlobFromStream(resizedImage.stream, frontDestination));
-                //     frontDestinations[resizedImage.size] = frontDestination;
-                // });
                 
                 return Q.all(azureTemps);
             })
@@ -315,7 +291,7 @@ function DesignController(wss){
                     
                     Q.all(uploadBlobFromUrls).then(function(parentsUploadedUrls){
                         //console.log('parentsUploadedUrls');
-                        suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid);
+                        suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction);
                     })
                     .catch(function(err) {
                         utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);
