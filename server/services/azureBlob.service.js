@@ -2,6 +2,11 @@ const storage = require('azure-storage');
 const azureConfig = require('../config/config').azure;
 const Q = require('q');
 const request = require('requestretry');
+const mkdirp = require('mkdirp-promise');
+const fs = require('fs');
+//const shell = require('node-powershell');
+const shell = require('shelljs');
+const path = require('path');
 
 let blobService = storage.createBlobService(azureConfig.connection_string)
 .withFilter(new storage.ExponentialRetryPolicyFilter());  
@@ -84,24 +89,95 @@ exports.uploadBlobFromUrl = function(sourceUrl, fileName) {
     
     request(options)
     .on('response', function(response) {
-        //console.log('uploadBlobFromUrl response' + sourceUrl);
+        console.log('downloadBlobFromUrl response' + sourceUrl);
         //console.log(response.statusCode) // 200
     })
     .on('error', function(err) { 
-        //console.log('uploadBlobFromUrl request error ' + sourceUrl);
+        console.log('downloadBlobFromUrl request error ' + sourceUrl);
         deferred.reject(new Error(err));
     })
     .pipe(blobService.createWriteStreamToBlockBlob(blockBlobContainerName, blockBlobName, {clientRequestTimeoutInMs: 480000 , contentSettings: {contentType: mime}} ,function (error) {
         if (error){
-            //console.log('uploadBlobFromUrl error ' + sourceUrl);
+            console.log('uploadBlobFromUrl error ' + sourceUrl);
             deferred.reject(new Error(error));
         } else{
-            //console.log('uploadBlobFromUrl success ' + sourceUrl);
+            console.log('uploadBlobFromUrl success ' + sourceUrl);
             deferred.resolve();
         }
     }));
     
     return deferred.promise;
+}
+
+exports.saveBlobFromUrl = function(sourceUrl, itemGuid, fileDir, fileName) {
+    
+    var deferred = Q.defer();
+    
+    //fetch image from url and pipe it down to azure blob service
+    var options = {
+        url: sourceUrl,
+        strictSSL: false,
+        secureProtocol: 'TLSv1_method'
+    };
+    
+    mkdirp(`./tmp/${itemGuid}/${fileDir}`)
+    .then((r) => {
+        
+        let destFile = fs.createWriteStream(`./tmp/${itemGuid}/${fileName}`);
+        
+        request(options)
+        .on('response', function(response) {
+            console.log('downloadBlobFromUrl response ' + sourceUrl);
+            //console.log(response.statusCode) // 200
+        })
+        .on('error', function(err) { 
+            console.log('downloadBlobFromUrl request error ' + sourceUrl);
+            deferred.reject(new Error(err));
+        })
+        .pipe(destFile);
+        
+        destFile.on('finish', function() {
+            console.log('saved downloadBlobFromUrl ' + sourceUrl);
+            deferred.resolve();
+        })
+        .on('error', function(e) {
+            console.log('error saving downloadBlobFromUrl ' + sourceUrl);
+            deferred.reject(new Error(e));
+        })
+    })
+    .catch((e) => {
+        console.error(e);
+        deferred.reject(new Error(e));
+    });
+    
+    return deferred.promise;
+}
+
+exports.azcopy = function(relativePath, extension, callback){
+    var mime =  extToMimes[extension];
+    let isWin = process.platform == 'win32';  
+    let cmd = '';
+    let absolutePath = path.resolve(relativePath);
+    
+    if(isWin){
+        
+    }
+    else{
+        cmd = `azcopy \
+        --source ${absolutePath} \
+        --destination ${azureConfig.base_url}${azureConfig.container} \
+        --dest-key ${azureConfig.key} \
+        --recursive
+        --quiet
+        --set-content-type "${mime}"`;
+    }
+    
+    shell.exec(cmd, function(code, stdout, stderr) {
+        console.log('Exit code:', code);
+        console.log('Program output:', stdout);
+        console.log('Program stderr:', stderr);
+        callback();
+    });
 }
 
 exports.listBlobsUnderFolder = function(folderName){

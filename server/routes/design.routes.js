@@ -23,8 +23,8 @@ module.exports = function(app, wss) {
     const router = express.Router();
     const design_controller = require('../controllers/design.controller')(wss);
     
-    router.get('/', (req, res) => {
-        //azureSvc.listBlobsUnderFolder(req.params.folderGuid);
+    router.get('/', (req, res) => {  
+        azureSvc.azcopy(`./tmp/1dd7161a26da45fc`,'png');      
         res.send('ok');
     });
     

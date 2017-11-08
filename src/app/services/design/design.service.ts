@@ -31,6 +31,7 @@ export class DesignService {
     formData.append("frontPrint_1500_1800", design.frontPrint_1500_1800, design.frontPrint_1500_1800.name);
     formData.append("frontPrint_1500_1500", design.frontPrint_1500_1500, design.frontPrint_1500_1500.name);
     formData.append("socketId", design.socketId);
+    formData.append("action", design.action);
     
     return this.authHttp.post(this.backendUrl + 'design/create', formData).toPromise();
   }

@@ -277,10 +277,11 @@ function DesignController(wss){
                             mockup.repVariantColor = mockup.repVariant.color_code.substring(1);
                             mockup.allVariantsUnderColorCode = colors[mockup.repVariant.product_id][mockup.repVariantColor];
                             variantsCount += mockup.allVariantsUnderColorCode.length;
-                            mockup.mockupDestination = `${itemGuid}/${mockup.repVariant.product_id}/${mockup.repVariantColor}.${mockup.mockup_url.slice((mockup.mockup_url.lastIndexOf(".") - 1 >>> 0) + 2)}`;
                             mockup.product = productsByKey[mockup.repVariant.product_id];
-
-                            uploadBlobFromUrls.push(azureSvc.uploadBlobFromUrl(mockup.mockup_url, mockup.mockupDestination));
+                            mockup.mockupDirectory = `${itemGuid}/${mockup.repVariant.product_id}`;
+                            mockup.mockupDestination = `${mockup.mockupDirectory}/${mockup.repVariantColor}.${mockup.mockup_url.slice((mockup.mockup_url.lastIndexOf(".") - 1 >>> 0) + 2)}`;
+                            uploadBlobFromUrls.push(azureSvc.saveBlobFromUrl(mockup.mockup_url, itemGuid, mockup.mockupDirectory, mockup.mockupDestination));
+                            // uploadBlobFromUrls.push(azureSvc.uploadBlobFromUrl(mockup.mockup_url, mockup.mockupDestination));
                         });
 
                         allMockups.push(mockups);
@@ -291,7 +292,7 @@ function DesignController(wss){
                     
                     Q.all(uploadBlobFromUrls).then(function(parentsUploadedUrls){
                         //console.log('parentsUploadedUrls');
-                        suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction);
+                        //suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction);
                     })
                     .catch(function(err) {
                         utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);

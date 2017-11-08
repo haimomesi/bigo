@@ -52,6 +52,7 @@ export class DesignFormComponent {
   initDesign(){
     this.design = new Design();
     this.design.guid = Utils.guid();
+    if(this.designForm) this.designForm._submitted = false;
     
     this.pictureParts.forEach(picturePart => {
       picturePart.removePicture();
