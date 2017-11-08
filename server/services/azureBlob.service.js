@@ -4,7 +4,6 @@ const Q = require('q');
 const request = require('requestretry');
 const mkdirp = require('mkdirp-promise');
 const fs = require('fs');
-//const shell = require('node-powershell');
 const shell = require('shelljs');
 const path = require('path');
 
@@ -153,31 +152,36 @@ exports.saveBlobFromUrl = function(sourceUrl, itemGuid, fileDir, fileName) {
     return deferred.promise;
 }
 
-exports.azcopy = function(relativePath, extension, callback){
+exports.azcopy = function(relativePath, extension){
     var mime =  extToMimes[extension];
     let isWin = process.platform == 'win32';  
-    let cmd = '';
+    let cmd = '', dockerCmd = '';
     let absolutePath = path.resolve(relativePath);
     
     if(isWin){
-        
+        dockerCmd = `docker run --rm -v ${absolutePath}:C:\\tmp farmer1992/azcopy`;
+        cmd = `${dockerCmd} \
+        AzCopy \
+        /Source:"C:\\tmp\" \
+        /Dest:${azureConfig.base_url}${azureConfig.container} \
+        /DestKey:${azureConfig.key} \
+        /S \
+        /Y \
+        /SetContentType:"${mime}"`;
     }
     else{
-        cmd = `azcopy \
-        --source ${absolutePath} \
-        --destination ${azureConfig.base_url}${azureConfig.container} \
-        --dest-key ${azureConfig.key} \
-        --recursive
-        --quiet
+        dockerCmd = `docker run --rm -v ${absolutePath}:/tmp farmer1992/azcopy:linux-latest`;
+        cmd = `${dockerCmd} \
+        azcopy \
+        --source "/tmp" \
+        --destination "${azureConfig.base_url}${azureConfig.container}" \
+        --dest-key "${azureConfig.key}" \
+        --recursive \
+        --quiet \
         --set-content-type "${mime}"`;
     }
     
-    shell.exec(cmd, function(code, stdout, stderr) {
-        console.log('Exit code:', code);
-        console.log('Program output:', stdout);
-        console.log('Program stderr:', stderr);
-        callback();
-    });
+    shell.exec(cmd, {async:true});
 }
 
 exports.listBlobsUnderFolder = function(folderName){

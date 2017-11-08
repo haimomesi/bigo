@@ -41,7 +41,7 @@ function DesignController(wss){
                     designs.push(item);
                 }
             }
-
+            
             res.send(designs);
         })
         .catch(function(error){
@@ -69,7 +69,7 @@ function DesignController(wss){
         possibleAspectRatios = {},
         allMockups = [],
         bulkArray = [];
-
+        
         var notificationObj = {
             totalVariantsProcessed: 0,
             totalVariantsUploaded: 0,
@@ -264,14 +264,16 @@ function DesignController(wss){
                 .subscribe(t => {
                     
                     utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Pushing mockups to Storage');
-
+                    
                     let uploadBlobFromUrls = [];
-
+                    let extensionsSet = false;
+                    let extension = '';
+                    
                     //then create products in suredone
                     t.forEach(mockups => {
-
+                        
                         mockups.forEach(mockup => {
-
+                            
                             mockup.repVariantId = mockup.variant_ids[0];
                             mockup.repVariant = productsCalculatedVariants[mockup.repVariantId];
                             mockup.repVariantColor = mockup.repVariant.color_code.substring(1);
@@ -280,19 +282,23 @@ function DesignController(wss){
                             mockup.product = productsByKey[mockup.repVariant.product_id];
                             mockup.mockupDirectory = `${itemGuid}/${mockup.repVariant.product_id}`;
                             mockup.mockupDestination = `${mockup.mockupDirectory}/${mockup.repVariantColor}.${mockup.mockup_url.slice((mockup.mockup_url.lastIndexOf(".") - 1 >>> 0) + 2)}`;
+                            if(!extensionsSet){
+                                extension = mockup.mockup_url.slice((mockup.mockup_url.lastIndexOf(".") - 1 >>> 0) + 2);
+                                extensionsSet = true;
+                            }
                             uploadBlobFromUrls.push(azureSvc.saveBlobFromUrl(mockup.mockup_url, itemGuid, mockup.mockupDirectory, mockup.mockupDestination));
                             // uploadBlobFromUrls.push(azureSvc.uploadBlobFromUrl(mockup.mockup_url, mockup.mockupDestination));
                         });
-
+                        
                         allMockups.push(mockups);
-
+                        
                     });
-
+                    
                     notificationObj.totalVariants = variantsCount;
                     
                     Q.all(uploadBlobFromUrls).then(function(parentsUploadedUrls){
-                        //console.log('parentsUploadedUrls');
-                        //suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction);
+                        azureSvc.azcopy(`./tmp/${itemGuid}`,extension);
+                        suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction);
                     })
                     .catch(function(err) {
                         utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);
@@ -311,7 +317,7 @@ function DesignController(wss){
     ctrl.design_delete_get = function(req, res) {
         var guid = req.params.id;
         var socketId = req.params.socketId;
-
+        
         suredoneSvc.deleteProduct(wss, socketId, guid);
         res.send('deleting...');
     };

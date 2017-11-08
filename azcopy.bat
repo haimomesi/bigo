@@ -1,0 +1,1 @@
+docker run --rm farmer1992/azcopy
