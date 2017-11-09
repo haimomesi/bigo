@@ -2,7 +2,6 @@ const storage = require('azure-storage');
 const azureConfig = require('../config/config').azure;
 const Q = require('q');
 const request = require('requestretry');
-const mkdirp = require('mkdirp-promise');
 const fs = require('fs');
 const shell = require('shelljs');
 const path = require('path');
@@ -119,35 +118,29 @@ exports.saveBlobFromUrl = function(sourceUrl, itemGuid, fileDir, fileName) {
         secureProtocol: 'TLSv1_method'
     };
     
-    mkdirp(`./tmp/${itemGuid}/${fileDir}`)
-    .then((r) => {
-        
-        let destFile = fs.createWriteStream(`./tmp/${itemGuid}/${fileName}`);
-        
-        request(options)
-        .on('response', function(response) {
-            console.log('downloadBlobFromUrl response ' + sourceUrl);
-            //console.log(response.statusCode) // 200
-        })
-        .on('error', function(err) { 
-            console.log('downloadBlobFromUrl request error ' + sourceUrl);
-            deferred.reject(new Error(err));
-        })
-        .pipe(destFile);
-        
-        destFile.on('finish', function() {
-            console.log('saved downloadBlobFromUrl ' + sourceUrl);
-            deferred.resolve();
-        })
-        .on('error', function(e) {
-            console.log('error saving downloadBlobFromUrl ' + sourceUrl);
-            deferred.reject(new Error(e));
-        })
+    shell.mkdir('-p', `./tmp/${itemGuid}/${fileDir}`);
+    
+    let destFile = fs.createWriteStream(`./tmp/${itemGuid}/${fileName}`);
+    
+    request(options)
+    .on('response', function(response) {
+        console.log('downloadBlobFromUrl response ' + sourceUrl);
+        //console.log(response.statusCode) // 200
     })
-    .catch((e) => {
-        console.error(e);
+    .on('error', function(err) { 
+        console.log('downloadBlobFromUrl request error ' + sourceUrl);
+        deferred.reject(new Error(err));
+    })
+    .pipe(destFile);
+    
+    destFile.on('finish', function() {
+        console.log('saved downloadBlobFromUrl ' + sourceUrl);
+        deferred.resolve();
+    })
+    .on('error', function(e) {
+        console.log('error saving downloadBlobFromUrl ' + sourceUrl);
         deferred.reject(new Error(e));
-    });
+    })
     
     return deferred.promise;
 }

@@ -112,7 +112,7 @@ getFromPrintful('products')
             productInvariantsDetails.result.variants.forEach(variant => {
                 let minimalVariant = {
                     newCost: variant.price,
-                    newPrice: Math.ceil(parseFloat(variant.price) * 1.3).toString(),
+                    newPrice: Math.ceil(parseFloat(variant.price) * 1.3).toString() + ".00",
                     newStock: variant.in_stock ? '1000' : '0'
                 }
                 variants[variant.id] = minimalVariant;
@@ -164,7 +164,6 @@ getFromPrintful('products')
                     {
                         let variantid = row[2];
                         let currentVariant = variants[variantid];
-                        
                         if(row[3] != currentVariant.newStock || row[4] != currentVariant.newPrice || row[5] != currentVariant.newCost){
                             row[3] = currentVariant.newStock; //stock
                             row[4] = currentVariant.newPrice; //price
@@ -174,9 +173,9 @@ getFromPrintful('products')
                     }
                 });
                 
-                if(bulkArray.length > 0)
+                if(bulkArray.length > 1)
                 {
-                    console.log(bulkArray);
+                    //console.log(bulkArray);
                     console.log(`Changes made: ${bulkArray.length}`);
                     
                     bulkBody += JSON.stringify(bulkArray);
