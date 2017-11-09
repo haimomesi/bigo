@@ -3,8 +3,8 @@ const azureConfig = require('../config/config').azure;
 const Q = require('q');
 const request = require('requestretry');
 const fs = require('fs');
-const shell = require('shelljs');
 const path = require('path');
+const shell = require('shelljs');
 
 let blobService = storage.createBlobService(azureConfig.connection_string)
 .withFilter(new storage.ExponentialRetryPolicyFilter());  
@@ -148,14 +148,12 @@ exports.saveBlobFromUrl = function(sourceUrl, itemGuid, fileDir, fileName) {
 exports.azcopy = function(relativePath, extension){
     var mime =  extToMimes[extension];
     let isWin = process.platform == 'win32';  
-    let cmd = '', dockerCmd = '';
+    let cmd = '';
     let absolutePath = path.resolve(relativePath);
     
     if(isWin){
-        dockerCmd = `docker run --rm -v ${absolutePath}:C:\\tmp farmer1992/azcopy`;
-        cmd = `${dockerCmd} \
-        AzCopy \
-        /Source:"C:\\tmp\" \
+        cmd = `D:\\Program Files (x86)\\Microsoft SDKs\\Azure\\AzCopy.exe \
+        /Source:"${absolutePath}" \
         /Dest:${azureConfig.base_url}${azureConfig.container} \
         /DestKey:${azureConfig.key} \
         /S \
@@ -163,12 +161,10 @@ exports.azcopy = function(relativePath, extension){
         /SetContentType:"${mime}"`;
     }
     else{
-        dockerCmd = `docker run --rm -v ${absolutePath}:/tmp farmer1992/azcopy:linux-latest`;
-        cmd = `${dockerCmd} \
-        azcopy \
-        --source "/tmp" \
-        --destination "${azureConfig.base_url}${azureConfig.container}" \
-        --dest-key "${azureConfig.key}" \
+        cmd = `azcopy \
+        --source ${absolutePath} \
+        --destination ${azureConfig.base_url}${azureConfig.container} \
+        --dest-key ${azureConfig.key} \
         --recursive \
         --quiet \
         --set-content-type "${mime}"`;
