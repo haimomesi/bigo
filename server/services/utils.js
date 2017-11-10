@@ -173,7 +173,7 @@ exports.getColorMap = function(printfulColor) {
         break;
         case 'Red':
         case 'Red Triblend':
-        amznColor = 'BrRedown';
+        amznColor = 'Red';
         break;
         case 'Oatmeal Triblend':
         amznColor = 'Off - White';

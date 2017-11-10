@@ -67,8 +67,7 @@ function DesignController(wss){
         mockupGeneratorSubscriptions = [],
         possibleSizes = {},
         possibleAspectRatios = {},
-        allMockups = [],
-        bulkArray = [];
+        allMockups = [];
         
         var notificationObj = {
             totalVariantsProcessed: 0,
@@ -298,7 +297,10 @@ function DesignController(wss){
                     
                     Q.all(uploadBlobFromUrls).then(function(parentsUploadedUrls){
                         azureSvc.azcopy(`./tmp/${itemGuid}`,extension);
-                        suredoneSvc.addProducts(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction);
+                        if(selectedAction == 'start')
+                        suredoneSvc.startProducts(allMockups, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid);
+                        else if(selectedAction == 'add')
+                        suredoneSvc.addProducts(allMockups, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid);
                     })
                     .catch(function(err) {
                         utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);

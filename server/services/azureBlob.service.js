@@ -124,7 +124,7 @@ exports.saveBlobFromUrl = function(sourceUrl, itemGuid, fileDir, fileName) {
     
     request(options)
     .on('response', function(response) {
-        console.log('downloadBlobFromUrl response ' + sourceUrl);
+        //console.log('downloadBlobFromUrl response ' + sourceUrl);
         //console.log(response.statusCode) // 200
     })
     .on('error', function(err) { 
@@ -134,7 +134,7 @@ exports.saveBlobFromUrl = function(sourceUrl, itemGuid, fileDir, fileName) {
     .pipe(destFile);
     
     destFile.on('finish', function() {
-        console.log('saved downloadBlobFromUrl ' + sourceUrl);
+        //console.log('saved downloadBlobFromUrl ' + sourceUrl);
         deferred.resolve();
     })
     .on('error', function(e) {
@@ -152,7 +152,7 @@ exports.azcopy = function(relativePath, extension){
     let absolutePath = path.resolve(relativePath);
     
     if(isWin){
-        cmd = `D:\\Program Files (x86)\\Microsoft SDKs\\Azure\\AzCopy.exe \
+        cmd = `D:\\home\\site\\wwwroot\\bin\\AzCopy\\AzCopy.exe \
         /Source:"${absolutePath}" \
         /Dest:${azureConfig.base_url}${azureConfig.container} \
         /DestKey:${azureConfig.key} \
@@ -170,7 +170,9 @@ exports.azcopy = function(relativePath, extension){
         --set-content-type "${mime}"`;
     }
     
-    shell.exec(cmd, {async:true});
+    shell.exec(cmd);
+    shell.rm('-rf', absolutePath);
+    //, {async:true});
 }
 
 exports.listBlobsUnderFolder = function(folderName){

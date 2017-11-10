@@ -104,15 +104,32 @@ let addProductToBulkArray = function(bulkArray, wss, socketId, notificationObj, 
     });
 };
 
+let relistProductToBulkArray = function(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, selectedAction){
+    mockups.forEach((mockup, index) => {
+        if (index == 0) {
+            populateRelistVariantArray(bulkArray, true, itemGuid, mockup, mockup.allVariantsUnderColorCode[0], selectedAction);
+        }
+    });
+};
+
+let relistVariantsToBulkArray = function(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, selectedAction){
+    mockups.forEach((mockup, index) => {
+        mockup.allVariantsUnderColorCode.forEach(variantUnderColorCode => {
+            populateRelistVariantArray(bulkArray, false, itemGuid, mockup, variantUnderColorCode, selectedAction);
+        });
+    });
+};
+
 let populateVariantArray = function(bulkArray, notificationObj, productRep, itemGuid, variant, variantUnderColorCode, stock, selectedAction){
     
     try {
         
         let productArray = [selectedAction];
+        let g = productRep ? `${itemGuid}-${variant.repVariant.product_id}` : `${itemGuid}-${variant.repVariant.product_id}-${variant.repVariantColor}-${variantUnderColorCode.id}`;
         
-        productRep ? productArray.push(`${itemGuid}-${variant.repVariant.product_id}`) : productArray.push(`${itemGuid}-${variant.repVariant.product_id}-${variant.repVariantColor}-${variantUnderColorCode.id}`); //guid
+        productArray.push(g); //guid
         productArray.push(`${itemGuid}-${variant.repVariant.product_id}`); //sku
-        productArray.push(`${itemGuid}-${variant.repVariant.product_id}`); //partnumber
+        productArray.push(g); //partnumber
         productArray.push(variantUnderColorCode.price); //cost
         productArray.push(stock); //stock
         productArray.push(Math.ceil(parseFloat(variantUnderColorCode.price) * 1.3).toString()); //price
@@ -155,51 +172,85 @@ let populateVariantArray = function(bulkArray, notificationObj, productRep, item
     }
 };
 
+let populateRelistVariantArray = function(bulkArray, productRep, itemGuid, variant, variantUnderColorCode, selectedAction){
+    
+    try {
+        let productArray = [selectedAction];
+        productRep ? productArray.push(`${itemGuid}-${variant.repVariant.product_id}`) : productArray.push(`${itemGuid}-${variant.repVariant.product_id}-${variant.repVariantColor}-${variantUnderColorCode.id}`); //guid
+        bulkArray.push(productArray);
+    }
+    catch(err){
+        console.error(err);
+    }
+};
+
 let populateHeader = function(bulkArray, selectedAction){
     if(bulkArray.length == 0)
-    bulkArray.push([
-        "action=" + selectedAction,
-        "guid",
-        "sku",
-        "partnumber",
-        "cost",
-        "stock", 
-        "price", 
-        "title", 
-        "media1", 
-        "brand", 
-        "description", 
-        "size", 
-        "color", 
-        "colorCode", 
-        "colormap", 
-        "department", 
-        "amznitemtype", 
-        "amzncategory", 
-        "registeredparameter", 
-        "variationtheme", 
-        "condition", 
-        "variantid", 
-        "keywords", 
-        "frontsize", 
-        "bigoguid", 
-        "bulletpoint1", 
-        "bulletpoint2", 
-        "bulletpoint3", 
-        "bulletpoint4", 
-        "bulletpoint5", 
-        "designrep" ]
-    );
+    {
+        if(selectedAction == 'start')
+        {
+            bulkArray.push([
+                "action=start",
+                "guid",
+                "sku",
+                "partnumber",
+                "cost",
+                "stock", 
+                "price", 
+                "title", 
+                "media1", 
+                "brand", 
+                "description", 
+                "size", 
+                "color", 
+                "colorCode", 
+                "colormap", 
+                "department", 
+                "amznitemtype", 
+                "amzncategory", 
+                "registeredparameter", 
+                "variationtheme", 
+                "condition", 
+                "variantid", 
+                "keywords", 
+                "frontsize", 
+                "bigoguid", 
+                "bulletpoint1", 
+                "bulletpoint2", 
+                "bulletpoint3", 
+                "bulletpoint4", 
+                "bulletpoint5", 
+                "designrep" ]
+            );
+        }
+        else if(selectedAction == 'relist'){
+            bulkArray.push([
+                "action=relist",
+                "guid"]
+            );
+        }
+    }
+    
 }
 
-exports.addProducts = function(allMockups, bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, selectedAction){
+let compare = function(a,b) {
+    if (a[2] < b[2])
+    return 1;
+    if (a[2] > b[2])
+    return -1;
+    return 0;
+}
+
+exports.startProducts = function(allMockups, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid){
+    
+    let bulkArray = [];
     
     utils.notifySocket(wss, socketId, itemGuid, 'pending',notificationObj, 'Proccessing all variants');
     
-    populateHeader(bulkArray, selectedAction);
+    populateHeader(bulkArray, 'start');
     
     allMockups.forEach(mockups => {
-        addProductToBulkArray(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, selectedAction);    
+        addProductToBulkArray(bulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, 'start');    
     });
     
     let bulkBody = 'requests=';
@@ -217,6 +268,49 @@ exports.addProducts = function(allMockups, bulkArray, wss, socketId, notificatio
     });
 };
 
+exports.addProducts = function(allMockups, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid){
+    
+    let startBulkArray = [], relistBulkArray = [];
+    
+    utils.notifySocket(wss, socketId, itemGuid, 'pending',notificationObj, 'Proccessing all variants');
+    
+    populateHeader(startBulkArray, 'start');
+    populateHeader(relistBulkArray, 'relist');
+    
+    allMockups.forEach(mockups => {
+        addProductToBulkArray(startBulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, 'start');
+        relistProductToBulkArray(relistBulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, 'relist');    
+    });
+    
+    allMockups.forEach(mockups => {
+        relistVariantsToBulkArray(relistBulkArray, wss, socketId, notificationObj, productsCalculatedVariants, colors, productsByKey, itemGuid, mockups, 'relist');    
+    });
+    
+    let startBulkBody = 'requests=', relistBulkBody = 'requests=';
+    startBulkBody += JSON.stringify(startBulkArray);
+    relistBulkBody += JSON.stringify(relistBulkArray);
+    
+    utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Pushing all drafts variants to SureDone');
+    
+    bulk_post('editor/items', startBulkBody)
+    .then(function(response){
+        
+        utils.notifySocket(wss, socketId, itemGuid, 'pending', notificationObj, 'Relisting all variants to SureDone');
+        bulk_post('editor/items', relistBulkBody)
+        .then(function(response){
+            utils.notifySocket(wss, socketId, itemGuid, 'success', notificationObj);
+        })
+        .catch(function(err){
+            utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);
+            console.error(err);
+        });
+    })
+    .catch(function(err){
+        utils.notifySocket(wss, socketId, itemGuid, 'error', notificationObj, err);
+        console.error(err);
+    });
+};
+
 exports.deleteProduct = function(wss, socketId, productGuid){
     
     //TODO: delete design from Azure
@@ -226,7 +320,7 @@ exports.deleteProduct = function(wss, socketId, productGuid){
         action: 'delete'
     };
     
-    let bulkBody = `q=bigoguid:=${productGuid}&type=items&mode=include&fields=action,guid`;
+    let bulkBody = `q=bigoguid:=${productGuid}&type=items&mode=include&fields=action,guid,variantid`;
     utils.notifySocket(wss, socketId, productGuid, 'pending', notificationObj, 'Fetching items from SureDone');
     
     bulk_post('bulk/exports', bulkBody)
@@ -268,6 +362,8 @@ exports.deleteProduct = function(wss, socketId, productGuid){
                     row[0] = index == 0 ? 'action=delete' : 'delete';
                     bulkArray.push(row);
                 });
+                
+                bulkArray.sort(compare);
                 
                 bulkBody += JSON.stringify(bulkArray);
                 
